@@ -1,26 +1,178 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useLayoutEffect} from 'react';
+import {
+  Route,
+  Redirect,
+  Switch,
+  BrowserRouter as Router
+} from 'react-router-dom';
+import styled from 'styled-components';
+import {withFirebase} from './components/Firebase';
+import useMediaQuery from 'react-use-media-query-hook';
 
-function App() {
+// Pages
+import HomeComponent from './components/HomeComponent';
+import Home from './pages/Home';
+import Event from './pages/Event';
+import TravelInfo from './pages/TravelInfo';
+import Schedule from './pages/Schedule';
+import Checklist from './pages/Checklist';
+import Help from './pages/Help';
+import LoadingPage from './pages/LoadingPage';
+import LoginPage from './pages/Login';
+
+// Components
+import HamburgerMenu from './components/HamburgerMenu';
+
+// Styled components
+const RootContainer = styled.div`
+  color: white;
+  font-family: Montserrat-Bold, Helvetica, sans-serif;
+`;
+
+const SidebarContainer = styled.div`
+  background-color: #8daa90;
+  display: flex;
+  position: fixed;
+  overflow-y: auto;
+  max-height: 100vh;
+`;
+
+const ContentContainer = styled.div`
+  width: 100%;
+  background-color: #5e765e;
+  display: flex;
+  overflow-y: auto;
+  @media screen and (min-width: 1200px) {
+    width: 67%;
+    float: right;
+  }
+`;
+
+const App = ({firebase}) => {
+  const [signedIn, setSignedIn] = useState(null);
+  const isComputer = useMediaQuery('(min-width: 1200px)');
+
+  useLayoutEffect(() => {
+    const unsubscribe = firebase.checkSignedIn(val => {
+      setSignedIn(val);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (signedIn === null) {
+    return <LoadingPage />;
+  }
+
+  const PrivateRoute = ({children, ...rest}) => {
+    return (
+      <Route
+        {...rest}
+        render={props =>
+          signedIn === true ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: {from: rest.path}
+              }}
+            />
+          )
+        }
+      />
+    );
+  };
+
+  const HomePage = isComputer
+    ? () => <Home />
+    : () => <HomeComponent paths={paths} />;
+
+  // Routes
+  const routes = [
+    {
+      label: 'Home',
+      path: '/',
+      exact: true,
+      main: HomePage
+    },
+    {
+      label: 'Event',
+      path: `/event`,
+      exact: false,
+      main: Event
+    },
+    {
+      label: 'Travel Info',
+      path: `/travel-info`,
+      exact: false,
+      main: TravelInfo
+    },
+    {
+      label: 'Schedule',
+      path: `/schedule`,
+      exact: false,
+      main: Schedule
+    },
+    {
+      label: 'Checklist',
+      path: `/checklist`,
+      exact: false,
+      main: Checklist
+    },
+    {
+      label: 'Help',
+      path: `/help`,
+      exact: false,
+      main: Help
+    }
+  ];
+
+  // Paths
+  const paths = [
+    ...routes.map(({label, path}) => ({
+      label: label,
+      path: path
+    }))
+  ];
+
+  const MainContainer = signedIn ? ContentContainer : React.Fragment;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <RootContainer>
+      {signedIn && (
+        <React.Fragment>
+          {isComputer && (
+            <SidebarContainer>
+              <HomeComponent paths={paths} />
+            </SidebarContainer>
+          )}
+          {!isComputer && (
+            <HamburgerMenu
+              paths={paths}
+              logout={async () => await firebase.signOut()}
+              buttonStyle={{left: 30, position: 'fixed'}}
+            />
+          )}
+        </React.Fragment>
+      )}
 
-export default App;
+      <MainContainer>
+        <Switch>
+          {routes.map((route, index) => (
+            <PrivateRoute
+              key={index}
+              path={route.path}
+              exact={route.exact}
+              children={<route.main />}
+            />
+          ))}
+          <Route exact path='/login' children={<LoginPage />} />
+        </Switch>
+      </MainContainer>
+    </RootContainer>
+  );
+};
+
+export default withFirebase(App);
