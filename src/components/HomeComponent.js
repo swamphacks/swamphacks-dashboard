@@ -19,7 +19,7 @@ const RootContainer = styled.div`
   background-color: #8daa90;
   @media screen and (min-width: 1200px) {
     padding-top: 40px;
-    width: 33vw;
+    width: 100%;
   }
 `;
 

@@ -13,10 +13,10 @@ import useMediaQuery from 'react-use-media-query-hook';
 import HomeComponent from './components/HomeComponent';
 import Home from './pages/Home';
 import Event from './pages/Event';
-import TravelInfo from './pages/TravelInfo';
 import Schedule from './pages/Schedule';
 import Checklist from './pages/Checklist';
 import Help from './pages/Help';
+import Travel from './pages/Travel';
 import LoadingPage from './pages/LoadingPage';
 import LoginPage from './pages/Login';
 
@@ -27,23 +27,27 @@ import HamburgerMenu from './components/HamburgerMenu';
 const RootContainer = styled.div`
   color: white;
   font-family: Montserrat-Bold, Helvetica, sans-serif;
+  height: 100vh;
 `;
 
 const SidebarContainer = styled.div`
   background-color: #8daa90;
-  display: flex;
-  position: fixed;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  width: 30%;
   overflow-y: auto;
-  max-height: 100vh;
 `;
 
 const ContentContainer = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
   width: 100%;
-  background-color: #5e765e;
-  display: flex;
   overflow-y: auto;
+  background-color: #5e765e;
   @media screen and (min-width: 1200px) {
-    width: 67%;
+    width: 70%;
     float: right;
   }
 `;
@@ -107,7 +111,7 @@ const App = ({firebase}) => {
       label: 'Travel Info',
       path: `/travel-info`,
       exact: false,
-      main: TravelInfo
+      main: Travel
     },
     {
       label: 'Schedule',
@@ -157,7 +161,6 @@ const App = ({firebase}) => {
           )}
         </React.Fragment>
       )}
-
       <MainContainer>
         <Switch>
           {routes.map((route, index) => (

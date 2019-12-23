@@ -50,6 +50,7 @@ const ButtonGroup = styled.div`
 `;
 
 const CustomLink = styled.p`
+  color: black;
   :hover {
     text-decoration: underline;
     cursor: pointer;
@@ -200,7 +201,7 @@ const LoginPage = ({firebase}) => {
               <CustomLink>Forgot your password?</CustomLink>
             </div>
             <ButtonGroup>
-              <SUIButton as={Link} to='/' basic color='black'>
+              <SUIButton as={Link} to='/'>
                 Back
               </SUIButton>
               <Button.Submit
