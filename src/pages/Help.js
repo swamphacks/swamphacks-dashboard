@@ -194,8 +194,14 @@ const faq = [
   },
   {
     title: 'When do applications close?',
+    content: <ContentText>Applications will close on January 10th.</ContentText>
+  },
+  {
+    title: 'When do I need to confirm by?',
     content: (
-      <ContentText>Applications will close on December 21st.</ContentText>
+      <ContentText>
+        The last day to confirm your acceptance is January 22nd.
+      </ContentText>
     )
   },
   {
