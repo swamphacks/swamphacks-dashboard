@@ -85,6 +85,7 @@ class Firebase {
           email: email,
           status: status,
           code: checkinCode,
+          accepted: accepted,
           confirmed: data.confirmedAttendance ? true : false
         };
       });

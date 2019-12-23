@@ -100,6 +100,7 @@ const HomeComponent = ({firebase, paths}) => {
     email: '{email}',
     status: '{status}',
     code: '{code}',
+    accepted: false,
     confirmed: false
   });
 
@@ -132,21 +133,22 @@ const HomeComponent = ({firebase, paths}) => {
         <InfoText>{data.email}</InfoText>
         <InfoText>Hacker</InfoText>
         <InfoText>Application Status: {data.status}</InfoText>
-        <ButtonContainer>
-          <Button
-            onClick={() => firebase.updateAttendance(true)}
-            disabled={data.confirmed}
-          >
-            {data.confirmed ? 'Attending' : 'Confirm Attendance'}
-          </Button>
-          <Button
-            onClick={() => firebase.updateAttendance(false)}
-            disabled={!data.confirmed}
-          >
-            {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
-          </Button>
-        </ButtonContainer>
-
+        {data.accepted && (
+          <ButtonContainer>
+            <Button
+              onClick={() => firebase.updateAttendance(true)}
+              disabled={data.confirmed}
+            >
+              {data.confirmed ? 'Attending' : 'Confirm Attendance'}
+            </Button>
+            <Button
+              onClick={() => firebase.updateAttendance(false)}
+              disabled={!data.confirmed}
+            >
+              {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
+            </Button>
+          </ButtonContainer>
+        )}
         <CodeText>{data.code}</CodeText>
       </InfoContainer>
       {/* Social Buttons */}

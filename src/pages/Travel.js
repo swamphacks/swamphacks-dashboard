@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import PageTitle from '../components/PageTitle';
@@ -33,7 +33,16 @@ const ContentText = styled.p`
   font-family: Montserrat, Helvetica, sans-serif;
 `;
 
-const LinkText = styled.div`
+const LinkText = styled.a`
+  font-family: Montserrat-Bold, Helvetica, sans-serif;
+  color: white;
+  :hover {
+    color: white;
+    text-decoration: underline;
+  }
+`;
+
+const EmailLinkText = styled.div`
   display: inline;
   font-family: Montserrat-Bold, Helvetica, sans-serif;
   color: white;
@@ -68,13 +77,13 @@ const Travel = () => {
             more. Additionally you can interact on any of our social media
             platforms to meet fellow hackers traveling to the Swamp. If you need
             additional help finding someone who can drive you, email us at{' '}
-            <LinkText
+            <EmailLinkText
               onClick={() => {
                 window.location.href = 'mailto:info@swamphacks.com';
               }}
             >
               info@swamphacks.com
-            </LinkText>
+            </EmailLinkText>
             !
           </ContentText>
           <ContentLabel>
@@ -105,8 +114,21 @@ const Travel = () => {
           </ContentText>
           <ContentLabel>Where do we park?</ContentLabel>
           <ContentText>
-            You can park in the Commuter lot (Commuter Lot 2016 Gale Lemrand Dr
-            Gainesville, FL 32603) or in Garage 4.
+            You can park in the{' '}
+            <LinkText
+              target='_blank'
+              href='https://www.google.com/maps/place/Commuter+Lot,+Gainesville,+FL+32603/@29.6419425,-82.3536721,17z/data=!3m1!4b1!4m5!3m4!1s0x88e8a37392f00873:0xec204b1c7b6802dc!8m2!3d29.6420037!4d-82.3512503'
+            >
+              Commuter lot
+            </LinkText>{' '}
+            (Commuter Lot 2016 Gale Lemrand Dr Gainesville, FL 32603) or in{' '}
+            <LinkText
+              target='_blank'
+              href='https://www.google.com/maps/place/Garage+4/@29.6455899,-82.3440011,17.97z/data=!4m5!3m4!1s0x88e8a39dae2803f5:0xc8caebf6f1dec8c!8m2!3d29.6453107!4d-82.3429002'
+            >
+              Garage 4
+            </LinkText>
+            .
           </ContentText>
           <ContentLabel>When is parking lifted?</ContentLabel>
           <ContentText>
@@ -118,13 +140,13 @@ const Travel = () => {
           <LabelText>Have more questions?</LabelText>
           <ContentText>
             Email us at{' '}
-            <LinkText
+            <EmailLinkText
               onClick={() => {
                 window.location.href = 'mailto:info@swamphacks.com';
               }}
             >
               info@swamphacks.com
-            </LinkText>
+            </EmailLinkText>
             !
           </ContentText>
         </Section>
