@@ -73,8 +73,8 @@ class Firebase {
       let retData = {};
       snap.docs.forEach(doc => {
         const data = doc.data();
-        const {firstName, lastName, email, accepted, checkinCode} = data;
-        const status = accepted === true ? 'Accepted' : 'Pending';
+        const {firstName, lastName, email, checkinCode} = data;
+        const accepted = data.accepted;
         const name = firstName + ' ' + lastName;
         const fi = firstName.substr(0, 1);
         const li = lastName.substr(0, 1);
@@ -83,7 +83,6 @@ class Firebase {
           initials: initials,
           name: name,
           email: email,
-          status: status,
           code: checkinCode,
           accepted: accepted,
           confirmed: data.confirmedAttendance ? true : false

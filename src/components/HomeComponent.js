@@ -106,7 +106,15 @@ const HomeComponent = ({firebase, paths}) => {
 
   useLayoutEffect(() => {
     const unsubscribe = firebase.getDashboardData(val => {
-      setData(val);
+      let newVal = val;
+      if (newVal.accepted === null) {
+        newVal.status = 'Pending';
+      } else if (newVal.accepted === true) {
+        newVal.status = 'Accepted';
+      } else if (newVal.accepted === false) {
+        newVal.status = 'Rejected';
+      }
+      setData(newVal);
     });
     return () => {
       unsubscribe();
