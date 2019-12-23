@@ -227,7 +227,7 @@ const LoginPage = ({firebase}) => {
               <CustomLink>Forgot your password?</CustomLink>
             </div>
             <ButtonGroup>
-              <SUIButton as={Link} to='/'>
+              <SUIButton as='a' href='https://2020.swamphacks.com'>
                 Back
               </SUIButton>
               <Button.Submit
