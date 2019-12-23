@@ -19,6 +19,8 @@ const Drawer = styled.div`
   z-index: 40;
   @media screen and (min-width: 1200px) {
     position: absolute;
+    padding-top: 200px;
+    justify-content: flex-start;
   }
 `;
 

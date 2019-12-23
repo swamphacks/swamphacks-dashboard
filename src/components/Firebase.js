@@ -41,6 +41,26 @@ class Firebase {
     await this.auth.signOut();
   };
 
+  updateAttendance = async val => {
+    const uid = this.auth.currentUser.uid;
+    const ref = this.firestore
+      .collection('years')
+      .doc('2020')
+      .collection('applications')
+      .where('uid', '==', uid);
+    const docs = await ref.get();
+    let id = null;
+    docs.forEach(doc => {
+      id = doc.id;
+    });
+    const ref2 = this.firestore
+      .collection('years')
+      .doc('2020')
+      .collection('applications')
+      .doc(id);
+    await ref2.update({confirmedAttendance: val});
+  };
+
   getDashboardData = callback => {
     const uid = this.auth.currentUser.uid;
     const ref = this.firestore
@@ -64,7 +84,8 @@ class Firebase {
           name: name,
           email: email,
           status: status,
-          code: checkinCode
+          code: checkinCode,
+          confirmed: data.confirmedAttendance ? true : false
         };
       });
       callback(retData);

@@ -4,6 +4,7 @@ import useMediaQuery from 'react-use-media-query-hook';
 
 import HamburgerMenu from './HamburgerMenu';
 import SocialButton from './SocialButton';
+import Button from './Button';
 import {withFirebase} from './Firebase';
 
 // Styled components
@@ -55,6 +56,14 @@ const InfoContainer = styled.div`
   flex-direction: column;
 `;
 
+const ButtonContainer = styled.div`
+  width: 100%;
+  padding: 20px 0px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
 const WelcomeText = styled.h1`
   font-weight: 900;
   font-size: 2.75rem;
@@ -67,7 +76,7 @@ const NameText = styled.h2`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
 `;
 
-const CodeText = styled.h4`
+const CodeText = styled.h3`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
 `;
 
@@ -90,7 +99,8 @@ const HomeComponent = ({firebase, paths}) => {
     name: '{name}',
     email: '{email}',
     status: '{status}',
-    code: '{code}'
+    code: '{code}',
+    confirmed: false
   });
 
   useLayoutEffect(() => {
@@ -122,10 +132,25 @@ const HomeComponent = ({firebase, paths}) => {
         <InfoText>{data.email}</InfoText>
         <InfoText>Hacker</InfoText>
         <InfoText>Application Status: {data.status}</InfoText>
+        <ButtonContainer>
+          <Button
+            onClick={() => firebase.updateAttendance(true)}
+            disabled={data.confirmed}
+          >
+            {data.confirmed ? 'Attending' : 'Confirm Attendance'}
+          </Button>
+          <Button
+            onClick={() => firebase.updateAttendance(false)}
+            disabled={!data.confirmed}
+          >
+            {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
+          </Button>
+        </ButtonContainer>
+
         <CodeText>{data.code}</CodeText>
       </InfoContainer>
       {/* Social Buttons */}
-      <div style={isComputer ? {position: 'absolute', bottom: 0} : {}}>
+      <div>
         <SocialContainer style={{paddingBottom: 0}}>
           <SocialButton
             slack
