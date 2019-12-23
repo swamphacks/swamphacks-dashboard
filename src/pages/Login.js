@@ -57,6 +57,14 @@ const CustomLink = styled.p`
   }
 `;
 
+const FootContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+`;
+
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -92,6 +100,22 @@ const LoginPage = ({firebase}) => {
       history.replace(from);
     } catch (error) {
       console.log(error);
+      if (error.code === 'auth/user-not-found') {
+        formikApi.setFieldError(
+          'email',
+          'There is no account associated with this email.'
+        );
+      } else if (error.code === 'auth/wrong-password') {
+        formikApi.setFieldError(
+          'password',
+          'The password associated with this account is incorrect.'
+        );
+      } else {
+        formikApi.setFieldError(
+          'email',
+          `Unexpected error. Code: [${error.code}].`
+        );
+      }
       formikApi.setSubmitting(false);
     }
   };
@@ -130,6 +154,8 @@ const LoginPage = ({firebase}) => {
               ignoreLoading
               initialValues={{email: ''}}
               style={{display: 'contents'}}
+              validateOnBlur={false}
+              validateOnChange={false}
             >
               {formikProps => (
                 <React.Fragment>
@@ -211,6 +237,14 @@ const LoginPage = ({firebase}) => {
                 Login
               </Button.Submit>
             </ButtonGroup>
+            <FootContainer
+              onClick={() =>
+                (window.location.href =
+                  'https://2020.swamphacks.com/application')
+              }
+            >
+              <CustomLink>Need an account? Apply now.</CustomLink>
+            </FootContainer>
           </InputContainer>
         )}
       </StyledForm>

@@ -13,8 +13,8 @@ class Firebase {
     this.firestore = firebase.firestore();
   }
 
-  sendPasswordResetEmail = async email => {
-    await this.auth.sendPasswordResetEmail(email);
+  sendPasswordResetEmail = email => {
+    return this.auth.sendPasswordResetEmail(email);
   };
 
   checkSignedIn = callback => {
@@ -25,8 +25,8 @@ class Firebase {
     return unsubscriber;
   };
 
-  signIn = async (email, password) => {
-    await this.auth.signInWithEmailAndPassword(email, password);
+  signIn = (email, password) => {
+    return this.auth.signInWithEmailAndPassword(email, password);
   };
 
   createAccount = (email, password) => {
