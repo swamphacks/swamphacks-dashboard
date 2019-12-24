@@ -77,7 +77,7 @@ const NameText = styled.h2`
 `;
 
 const CodeText = styled.h3`
-  font-family: Montserrat-Bold, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
 `;
 
 const InfoText = styled.p`
@@ -107,7 +107,7 @@ const HomeComponent = ({firebase, paths}) => {
   useLayoutEffect(() => {
     const unsubscribe = firebase.getDashboardData(val => {
       let newVal = val;
-      if (newVal.accepted === null) {
+      if (newVal.accepted === null || newVal.accepted === undefined) {
         newVal.status = 'Pending';
       } else if (newVal.accepted === true) {
         newVal.status = 'Accepted';
@@ -161,13 +161,15 @@ const HomeComponent = ({firebase, paths}) => {
       </InfoContainer>
       {/* Social Buttons */}
       <div>
-        <SocialContainer style={{paddingBottom: 0}}>
-          <SocialButton
-            slack
-            link='https://join.slack.com/t/swamphacks-vi/shared_invite/enQtODczMDY5NTc5MjMzLTY0ODViYjZiZjljYzdkNDY3ZDNiNjYyNWRkYjk3YTlkNzMyMjlkYTFmN2ExYTc1MGQ3NDEzYjk5MDBiZTI2YjU'
-            big
-          />
-        </SocialContainer>
+        {data.accepted && data.confirmed && (
+          <SocialContainer style={{paddingBottom: 0}}>
+            <SocialButton
+              slack
+              link='https://join.slack.com/t/swamphacks-vi/shared_invite/enQtODczMDY5NTc5MjMzLTY0ODViYjZiZjljYzdkNDY3ZDNiNjYyNWRkYjk3YTlkNzMyMjlkYTFmN2ExYTc1MGQ3NDEzYjk5MDBiZTI2YjU'
+              big
+            />
+          </SocialContainer>
+        )}
         <SocialContainer>
           <SocialButton
             facebook
