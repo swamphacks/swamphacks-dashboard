@@ -59,6 +59,16 @@ class Firebase {
       .collection('applications')
       .doc(id);
     await ref2.update({confirmedAttendance: val});
+    const ref3 = this.firestore
+      .collection('years')
+      .doc('2020')
+      .collection('metadata')
+      .doc('applications');
+    let count = 1;
+    if (val === false) count = -1;
+    await ref3.update({
+      confirmedSize: firebase.firestore.FieldValue.increment(count)
+    });
   };
 
   getDashboardData = callback => {
