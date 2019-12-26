@@ -111,6 +111,9 @@ const HomeComponent = ({firebase, paths}) => {
         newVal.status = 'Pending';
       } else if (newVal.accepted === true) {
         newVal.status = 'Accepted';
+        if (newVal.confirmed === true) {
+          newVal.status = 'Confirmed';
+        }
       } else if (newVal.accepted === false) {
         newVal.status = 'Rejected';
       }

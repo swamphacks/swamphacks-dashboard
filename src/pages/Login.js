@@ -37,7 +37,7 @@ const InputContainer = styled.div`
   width: 100%;
   max-width: 400px;
   @media screen and (min-width: 1200px) {
-    width: 30%;
+    width: 400px;
   }
 `;
 
@@ -47,6 +47,9 @@ const ButtonGroup = styled.div`
   align-items: center;
   justify-content: flex-end;
   padding-top: 20px;
+  @media screen and (min-width: 1200px) {
+    justify-content: center;
+  }
 `;
 
 const CustomLink = styled.p`
@@ -60,9 +63,27 @@ const CustomLink = styled.p`
 const FootContainer = styled.div`
   width: 100%;
   display: flex;
+  max-width: 300px;
+  text-align: center;
   align-items: center;
   justify-content: center;
   padding-top: 40px;
+  @media screen and (min-width: 1200px) {
+    padding-top: 0px;
+  }
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+  }
 `;
 
 const schema = yup.object().shape({
@@ -197,57 +218,58 @@ const LoginPage = ({firebase}) => {
       <TitleContainer>
         <h1>Login</h1>
       </TitleContainer>
-      <StyledForm
-        onSubmit={_handleSubmit}
-        validationSchema={schema}
-        ignoreLoading
-        initialValues={{email: '', password: ''}}
-      >
-        {formikProps => (
-          <InputContainer>
-            <Input
-              name='email'
-              label='Email'
-              inputProps={{placeholder: 'Email', type: 'email'}}
-              fieldProps={{
-                required: true
-              }}
-              errorComponent={errorComponent}
-            />
-            <Input
-              name='password'
-              label='Password'
-              inputProps={{type: 'password', placeholder: 'Password'}}
-              fieldProps={{
-                required: true
-              }}
-              errorComponent={errorComponent}
-            />
-            <div onClick={() => setForgotPassword(true)}>
-              <CustomLink>Forgot your password?</CustomLink>
-            </div>
-            <ButtonGroup>
-              <SUIButton as='a' href='https://2020.swamphacks.com'>
-                Back
-              </SUIButton>
-              <Button.Submit
-                loading={formikProps.isSubmitting}
-                disabled={formikProps.isSubmitting}
-              >
-                Login
-              </Button.Submit>
-            </ButtonGroup>
-            <FootContainer
-              onClick={() =>
-                (window.location.href =
-                  'https://2020.swamphacks.com/application')
-              }
-            >
-              <CustomLink>Need an account? Apply now.</CustomLink>
-            </FootContainer>
-          </InputContainer>
-        )}
-      </StyledForm>
+      <FormContainer>
+        <StyledForm
+          onSubmit={_handleSubmit}
+          validationSchema={schema}
+          ignoreLoading
+          initialValues={{email: '', password: ''}}
+        >
+          {formikProps => (
+            <InputContainer>
+              <Input
+                name='email'
+                label='Email'
+                inputProps={{placeholder: 'Email', type: 'email'}}
+                fieldProps={{
+                  required: true
+                }}
+                errorComponent={errorComponent}
+              />
+              <Input
+                name='password'
+                label='Password'
+                inputProps={{type: 'password', placeholder: 'Password'}}
+                fieldProps={{
+                  required: true
+                }}
+                errorComponent={errorComponent}
+              />
+              <div onClick={() => setForgotPassword(true)}>
+                <CustomLink>Forgot your password?</CustomLink>
+              </div>
+              <ButtonGroup>
+                <SUIButton as='a' href='https://2020.swamphacks.com'>
+                  Back
+                </SUIButton>
+                <Button.Submit
+                  loading={formikProps.isSubmitting}
+                  disabled={formikProps.isSubmitting}
+                >
+                  Login
+                </Button.Submit>
+              </ButtonGroup>
+            </InputContainer>
+          )}
+        </StyledForm>
+        <FootContainer
+          onClick={() =>
+            (window.location.href = 'https://2020.swamphacks.com/application')
+          }
+        >
+          <CustomLink>Haven't applied? Need an account? Apply now.</CustomLink>
+        </FootContainer>
+      </FormContainer>
     </RootContainer>
   );
 };

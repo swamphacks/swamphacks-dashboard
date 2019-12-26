@@ -37,15 +37,17 @@ const SidebarContainer = styled.div`
   height: 100%;
   width: 30%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 const ContentContainer = styled.div`
-  display: inline-block;
   vertical-align: top;
+  display: inline-block;
   height: 100%;
   width: 100%;
   overflow-y: auto;
   background-color: #5e765e;
+  -webkit-overflow-scrolling: touch;
   @media screen and (min-width: 1200px) {
     width: 70%;
     float: right;
