@@ -27,7 +27,10 @@ import HamburgerMenu from './components/HamburgerMenu';
 const RootContainer = styled.div`
   color: white;
   font-family: Montserrat-Bold, Helvetica, sans-serif;
-  height: 100vh;
+  height: auto;
+  @media screen and (min-width: 1200px) {
+    height: 100vh;
+  }
 `;
 
 const SidebarContainer = styled.div`
@@ -43,13 +46,14 @@ const SidebarContainer = styled.div`
 const ContentContainer = styled.div`
   vertical-align: top;
   display: inline-block;
-  height: 100%;
+  height: auto;
   width: 100%;
   overflow-y: auto;
   background-color: #5e765e;
   -webkit-overflow-scrolling: touch;
   @media screen and (min-width: 1200px) {
     width: 70%;
+    height: 100%;
     float: right;
   }
 `;

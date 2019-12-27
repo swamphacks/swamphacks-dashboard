@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 const PageRootContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,6 +10,7 @@ const PageRootContainer = styled.div`
   padding-top: 140px;
   @media screen and (min-width: 1200px) {
     padding-top: 40px;
+    min-height: 100vh;
   }
 `;
 

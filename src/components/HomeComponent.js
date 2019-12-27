@@ -10,7 +10,6 @@ import {withFirebase} from './Firebase';
 // Styled components
 const RootContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -21,6 +20,7 @@ const RootContainer = styled.div`
   @media screen and (min-width: 1200px) {
     padding-top: 40px;
     width: 100%;
+    min-height: 100vh;
   }
 `;
 
