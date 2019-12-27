@@ -16,11 +16,12 @@ import {withFirebase} from '../components/Firebase';
 // Styled components
 const RootContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   @media screen and (min-width: 1200px) {
     flex-direction: row;
+    height: 100vh;
   }
 `;
 
@@ -55,7 +56,8 @@ const CustomLink = styled.p`
 `;
 
 const FootContainer = styled.div`
-  height: 30%;
+  height: auto;
+  padding: 40px 0;
   width: 100%;
   display: flex;
   text-align: center;
@@ -64,21 +66,19 @@ const FootContainer = styled.div`
   flex-direction: column;
   @media screen and (min-width: 1200px) {
     width: 50%;
-    height: auto;
   }
 `;
 
 const FormContainer = styled.div`
+  padding: 40px 0;
   display: flex;
   width: 100%;
-  height: 70%;
+  height: auto;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   @media screen and (min-width: 1200px) {
-    padding-top: 0px;
     width: 50%;
-    height: auto;
   }
 `;
 
