@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
+import useMediaQuery from 'react-use-media-query-hook';
 import {Button, Form, Input} from 'formik-semantic-ui';
-import {Label, Transition, Button as SUIButton, Modal} from 'semantic-ui-react';
+import {
+  Label,
+  Transition,
+  Button as SUIButton,
+  Modal,
+  Divider
+} from 'semantic-ui-react';
 import styled from 'styled-components';
 import * as yup from 'yup';
 import {withFirebase} from '../components/Firebase';
@@ -11,17 +18,10 @@ const RootContainer = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-`;
-
-const TitleContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 40px;
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+  }
 `;
 
 const StyledForm = styled(Form)`
@@ -36,9 +36,6 @@ const InputContainer = styled.div`
   padding: 20px 40px;
   width: 100%;
   max-width: 400px;
-  @media screen and (min-width: 1200px) {
-    width: 400px;
-  }
 `;
 
 const ButtonGroup = styled.div`
@@ -47,9 +44,6 @@ const ButtonGroup = styled.div`
   align-items: center;
   justify-content: flex-end;
   padding-top: 20px;
-  @media screen and (min-width: 1200px) {
-    justify-content: center;
-  }
 `;
 
 const CustomLink = styled.p`
@@ -61,28 +55,30 @@ const CustomLink = styled.p`
 `;
 
 const FootContainer = styled.div`
+  height: 30%;
   width: 100%;
   display: flex;
-  max-width: 300px;
   text-align: center;
   align-items: center;
   justify-content: center;
-  padding-top: 40px;
+  flex-direction: column;
   @media screen and (min-width: 1200px) {
-    padding-top: 0px;
+    width: 50%;
+    height: auto;
   }
 `;
 
 const FormContainer = styled.div`
   display: flex;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  height: 70%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: column;
   @media screen and (min-width: 1200px) {
-    flex-direction: row;
+    padding-top: 0px;
+    width: 50%;
+    height: auto;
   }
 `;
 
@@ -108,6 +104,7 @@ const errorComponent = ({message}) => (
 );
 
 const LoginPage = ({firebase}) => {
+  const isComputer = useMediaQuery('(min-width: 1200px)');
   const [forgotPassword, setForgotPassword] = useState(false);
   const history = useHistory();
   const location = useLocation();
@@ -215,10 +212,8 @@ const LoginPage = ({firebase}) => {
           </Modal.Content>
         </Modal>
       </Transition>
-      <TitleContainer>
-        <h1>Login</h1>
-      </TitleContainer>
       <FormContainer>
+        <h1 style={{color: 'black'}}>Login</h1>
         <StyledForm
           onSubmit={_handleSubmit}
           validationSchema={schema}
@@ -262,14 +257,20 @@ const LoginPage = ({firebase}) => {
             </InputContainer>
           )}
         </StyledForm>
-        <FootContainer
-          onClick={() =>
-            (window.location.href = 'https://2020.swamphacks.com/application')
-          }
-        >
-          <CustomLink>Haven't applied? Need an account? Apply now.</CustomLink>
-        </FootContainer>
       </FormContainer>
+      <Divider vertical={isComputer} horizontal={!isComputer}>
+        OR
+      </Divider>
+      <FootContainer>
+        <p style={{color: 'black'}}>Haven't applied? Need an account?</p>
+        <SUIButton
+          primary
+          as='a'
+          href='https://2020.swamphacks.com/application'
+        >
+          Apply Now
+        </SUIButton>
+      </FootContainer>
     </RootContainer>
   );
 };
