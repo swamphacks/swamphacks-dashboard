@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import PageTitle from '../components/PageTitle';
@@ -29,62 +29,120 @@ const EventText = styled.p`
 `;
 
 const Schedule = () => {
+  const [events, setEvents] = useState(null);
+  const [filterType, setFilterType] = useState(null);
+  useEffect(() => {
+    setEvents([
+      createEvent(
+        'Test 1',
+        'Logistics',
+        'Marston Breezeway',
+        'Friday',
+        '05:30 PM',
+        '07:30 PM'
+      ),
+      createEvent(
+        'Test 2',
+        'Food',
+        'Marston Breezeway',
+        'Friday',
+        '06:00 PM',
+        '07:30 PM'
+      ),
+      createEvent(
+        'Test 3',
+        'Activity',
+        'Marston Breezeway',
+        'Saturday',
+        '06:00 AM',
+        '07:30 AM'
+      ),
+      createEvent(
+        'Test 4',
+        'Activity',
+        'Marston Breezeway',
+        'Saturday',
+        '06:00 PM',
+        '07:30 PM'
+      )
+    ]);
+  }, []);
+
   return (
     <RootContainer>
       <PageTitle title='Schedule' />
-      <ContentContainer>
-        {events.map(event => (
-          <EventContainer key={event.day}>
-            <DayText>{event.day}</DayText>
-            {event.events.map(({name, time}) => (
-              <EventText key={name + time}>
-                {name} - {time}
-              </EventText>
-            ))}
-          </EventContainer>
-        ))}
-      </ContentContainer>
+      {events !== null && (
+        <ContentContainer>
+          {/* Friday */}
+          <React.Fragment>
+            <DayText>Friday</DayText>
+            {events.map(event => {
+              if (event.day === 'Friday') {
+                return (
+                  <EventContainer key={event.name + event.start}>
+                    <EventText>{event.name}</EventText>
+                  </EventContainer>
+                );
+              }
+            })}
+          </React.Fragment>
+          {/* Saturday */}
+          <React.Fragment>
+            <DayText>Saturday</DayText>
+            {events.map(event => {
+              if (event.day === 'Saturday') {
+                return (
+                  <EventContainer key={event.name + event.start}>
+                    <EventText>{event.name}</EventText>
+                  </EventContainer>
+                );
+              }
+            })}
+          </React.Fragment>
+          {/* Sunday */}
+          <React.Fragment>
+            <DayText>Sunday</DayText>
+            {events.map(event => {
+              if (event.day === 'Sunday') {
+                return (
+                  <EventContainer key={event.name + event.start}>
+                    <EventText>{event.name}</EventText>
+                  </EventContainer>
+                );
+              }
+            })}
+          </React.Fragment>
+        </ContentContainer>
+      )}
     </RootContainer>
   );
 };
 
-const createEvent = (name, time) => ({
+const createEvent = (name, type, location, day, start, end) => ({
   name,
-  time
+  type,
+  location,
+  day,
+  start,
+  end,
+  startDate: interpolateDate(day, start)
 });
 
-const events = [
-  {
-    day: 'Friday',
-    events: [
-      createEvent('Check-In', '5:30-7:30 PM'),
-      createEvent('Dinner', '6:00-8:00 PM'),
-      createEvent('Team Building', '6:30-8:00 PM'),
-      createEvent('Opening Ceremony', '8:00-9:00 PM'),
-      createEvent('Sponsor Fair', '9:00-10:00 PM'),
-      createEvent('Hacking Begins', '10:00 PM')
-    ]
-  },
-  {
-    day: 'Saturday',
-    events: [
-      createEvent('Midnight Snack', '12:00 AM'),
-      createEvent('Breakfast', '8:00-9:00 AM'),
-      createEvent('Lunch', '1:00-2:30 PM'),
-      createEvent('Dinner', '6:00-7:30 PM')
-    ]
-  },
-  {
-    day: 'Sunday',
-    events: [
-      createEvent('Midnight Snack', '12:00 AM'),
-      createEvent('Breakfast', '6:00-8:00 AM'),
-      createEvent('Devpost Submissions Close', '8:00 AM'),
-      createEvent('Hacking Ends + Lunch', '10:00 AM'),
-      createEvent('Demo Waves', '11:00 AM - 2:00 PM'),
-      createEvent('Closing Ceremony', '2:30-3:30 PM')
-    ]
-  }
-];
+const interpolateDate = (day, time) => {
+  let month = 1;
+  let d = 31;
+  if (day === 'Friday') month = 0;
+  if (day === 'Saturday') d = 1;
+  if (day === 'Sunday') d = 2;
+  let amPM = time.slice(time.length - 2);
+  let hour = parseInt(time.slice(0, time.length - 6));
+  let minute = parseInt(time.slice(3, time.length - 3));
+  if (amPM === 'PM') hour += 12;
+  if (hour > 24) hour -= 24;
+  return new Date(2020, month, d, hour, minute);
+};
+
+const types = ['Logistics', 'Food', 'Activity'];
+const startDate = new Date(2020, 0, 31);
 
 export default Schedule;
