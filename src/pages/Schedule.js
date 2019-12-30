@@ -10,14 +10,33 @@ const ContentContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `;
 
-const EventContainer = styled.div`
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  column-gap: 10px;
+  row-gap: 20px;
+  justify-items: center;
+  align-items: stretch;
+`;
+
+const Chip = styled.div`
+  padding: 5px;
+  font-family: ${props =>
+    props.bold
+      ? 'Montserrat-Bold, Helvetica, sans-serif'
+      : 'Montserrat, Helvetica, sans-serif'};
+  background-color: ${props => (props.bold ? 'transparent' : '#8daa90')};
+  opacity: ${props => (props.complete ? '0.5' : '1')}
+  border-radius: 5px;
+  font-size: 0.9rem;
   width: 100%;
+  flex-shrink: 0;
   display: flex;
-  flex-direction: column;
-  padding: 20px 0px;
-  max-width: 680px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const DayText = styled.h3`
@@ -32,40 +51,42 @@ const Schedule = () => {
   const [events, setEvents] = useState(null);
   const [filterType, setFilterType] = useState(null);
   useEffect(() => {
-    setEvents([
-      createEvent(
-        'Test 1',
-        'Logistics',
-        'Marston Breezeway',
-        'Friday',
-        '05:30 PM',
-        '07:30 PM'
-      ),
-      createEvent(
-        'Test 2',
-        'Food',
-        'Marston Breezeway',
-        'Friday',
-        '06:00 PM',
-        '07:30 PM'
-      ),
-      createEvent(
-        'Test 3',
-        'Activity',
-        'Marston Breezeway',
-        'Saturday',
-        '06:00 AM',
-        '07:30 AM'
-      ),
-      createEvent(
-        'Test 4',
-        'Activity',
-        'Marston Breezeway',
-        'Saturday',
-        '06:00 PM',
-        '07:30 PM'
-      )
-    ]);
+    setEvents(
+      [
+        createEvent(
+          'Test 1',
+          'Logistics',
+          'Marston Breezeway',
+          'Friday',
+          '05:30 PM',
+          '07:30 PM'
+        ),
+        createEvent(
+          'Test 2',
+          'Food',
+          'Marston Breezeway',
+          'Friday',
+          '06:00 PM',
+          '07:30 PM'
+        ),
+        createEvent(
+          'Test 4',
+          'Activity',
+          'Marston Breezeway',
+          'Saturday',
+          '06:00 PM',
+          '07:30 PM'
+        ),
+        createEvent(
+          'Test 3',
+          'Activity',
+          'Marston Breezeway',
+          'Saturday',
+          '06:00 AM',
+          '07:30 AM'
+        )
+      ].sort(sortByDateHelper)
+    );
   }, []);
 
   return (
@@ -76,47 +97,63 @@ const Schedule = () => {
           {/* Friday */}
           <React.Fragment>
             <DayText>Friday</DayText>
-            {events.map(event => {
-              if (event.day === 'Friday') {
-                return (
-                  <EventContainer key={event.name + event.start}>
-                    <EventText>{event.name}</EventText>
-                  </EventContainer>
-                );
-              }
-            })}
+
+            <GridContainer>
+              {renderKey()}
+              {events.map(event => {
+                if (event.day === 'Friday') {
+                  return renderEvent(event);
+                }
+              })}
+            </GridContainer>
           </React.Fragment>
           {/* Saturday */}
           <React.Fragment>
             <DayText>Saturday</DayText>
-            {events.map(event => {
-              if (event.day === 'Saturday') {
-                return (
-                  <EventContainer key={event.name + event.start}>
-                    <EventText>{event.name}</EventText>
-                  </EventContainer>
-                );
-              }
-            })}
+            <GridContainer>
+              {events.map(event => {
+                if (event.day === 'Saturday') {
+                  return renderEvent(event);
+                }
+              })}
+            </GridContainer>
           </React.Fragment>
           {/* Sunday */}
           <React.Fragment>
             <DayText>Sunday</DayText>
-            {events.map(event => {
-              if (event.day === 'Sunday') {
-                return (
-                  <EventContainer key={event.name + event.start}>
-                    <EventText>{event.name}</EventText>
-                  </EventContainer>
-                );
-              }
-            })}
+            <GridContainer>
+              {events.map(event => {
+                if (event.day === 'Sunday') {
+                  return renderEvent(event);
+                }
+              })}
+            </GridContainer>
           </React.Fragment>
         </ContentContainer>
       )}
     </RootContainer>
   );
 };
+
+const renderKey = () => (
+  <React.Fragment>
+    <Chip bold>Name</Chip>
+    <Chip bold>Type</Chip>
+    <Chip bold>Location</Chip>
+    <Chip bold>Start</Chip>
+    <Chip bold>End</Chip>
+  </React.Fragment>
+);
+
+const renderEvent = event => (
+  <React.Fragment key={event.name + event.start}>
+    <Chip complete={checkIfComplete(event)}>{event.name}</Chip>
+    <Chip complete={checkIfComplete(event)}>{event.type}</Chip>
+    <Chip complete={checkIfComplete(event)}>{event.location}</Chip>
+    <Chip complete={checkIfComplete(event)}>{event.start}</Chip>
+    <Chip complete={checkIfComplete(event)}>{event.end}</Chip>
+  </React.Fragment>
+);
 
 const createEvent = (name, type, location, day, start, end) => ({
   name,
@@ -125,7 +162,8 @@ const createEvent = (name, type, location, day, start, end) => ({
   day,
   start,
   end,
-  startDate: interpolateDate(day, start)
+  startDate: interpolateDate(day, start),
+  endDate: interpolateDate(day, end)
 });
 
 const interpolateDate = (day, time) => {
@@ -140,6 +178,14 @@ const interpolateDate = (day, time) => {
   if (amPM === 'PM') hour += 12;
   if (hour > 24) hour -= 24;
   return new Date(2020, month, d, hour, minute);
+};
+
+const sortByDateHelper = (a, b) => {
+  return a.startDate - b.startDate;
+};
+
+const checkIfComplete = a => {
+  return a.endDate <= Date.now();
 };
 
 const types = ['Logistics', 'Food', 'Activity'];

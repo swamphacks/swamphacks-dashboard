@@ -15,6 +15,7 @@
     "react-scripts": "3.3.0",
     "react-spring": "^8.0.27",
     "react-use-media-query-hook": "0.0.1",
+    "request": "^2.88.0",
     "semantic-ui-react": "^0.88.2",
     "styled-components": "^4.4.1",
     "yup": "^0.28.0"
