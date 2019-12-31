@@ -13,6 +13,20 @@ class Firebase {
     this.firestore = firebase.firestore();
   }
 
+  checkApplicationsOpen = async callback => {
+    const ref = this.firestore.collection('years').doc('2020');
+    const fields = await ref.get();
+    const val = fields.data().hackerApplicationsOpen;
+    callback(val);
+  };
+
+  checkConfirmationsClosed = async callback => {
+    const ref = this.firestore.collection('years').doc('2020');
+    const fields = await ref.get();
+    const val = fields.data().confirmationsOpen;
+    callback(val);
+  };
+
   sendPasswordResetEmail = email => {
     return this.auth.sendPasswordResetEmail(email);
   };

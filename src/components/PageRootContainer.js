@@ -1,6 +1,7 @@
+import React from 'react';
 import styled from 'styled-components';
 
-const PageRootContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
@@ -13,5 +14,10 @@ const PageRootContainer = styled.div`
     min-height: 100vh;
   }
 `;
+
+const PageRootContainer = ({children}) => {
+  document.body.style = 'background: #5e765e;';
+  return <Container>{children}</Container>;
+};
 
 export {PageRootContainer};

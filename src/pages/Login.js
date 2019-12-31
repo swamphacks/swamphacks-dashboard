@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 import useMediaQuery from 'react-use-media-query-hook';
 import {Button, Form, Input} from 'formik-semantic-ui';
@@ -55,7 +55,7 @@ const CustomLink = styled.p`
   }
 `;
 
-const FootContainer = styled.div`
+const ApplyContainer = styled.div`
   height: auto;
   padding: 40px 0;
   width: 100%;
@@ -78,7 +78,7 @@ const FormContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   @media screen and (min-width: 1200px) {
-    width: 50%;
+    width: ${props => (props.applicationsOpen ? '50%' : '100%')};
   }
 `;
 
@@ -106,9 +106,16 @@ const errorComponent = ({message}) => (
 const LoginPage = ({firebase}) => {
   const isComputer = useMediaQuery('(min-width: 1200px)');
   const [forgotPassword, setForgotPassword] = useState(false);
+  const [applicationsOpen, setApplicationsOpen] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const {from} = location.state || {from: {pathname: '/'}};
+
+  document.body.style = 'background: white;';
+
+  useLayoutEffect(() => {
+    firebase.checkApplicationsOpen(val => setApplicationsOpen(val));
+  }, []);
 
   const _handleSubmit = async (values, formikApi) => {
     const {email, password} = values;
@@ -212,7 +219,7 @@ const LoginPage = ({firebase}) => {
           </Modal.Content>
         </Modal>
       </Transition>
-      <FormContainer>
+      <FormContainer applicationsOpen={applicationsOpen}>
         <h1 style={{color: 'black'}}>Login</h1>
         <StyledForm
           onSubmit={_handleSubmit}
@@ -258,19 +265,23 @@ const LoginPage = ({firebase}) => {
           )}
         </StyledForm>
       </FormContainer>
-      <Divider vertical={isComputer} horizontal={!isComputer}>
-        OR
-      </Divider>
-      <FootContainer>
-        <p style={{color: 'black'}}>Haven't applied? Need an account?</p>
-        <SUIButton
-          primary
-          as='a'
-          href='https://2020.swamphacks.com/application'
-        >
-          Apply Now
-        </SUIButton>
-      </FootContainer>
+      {applicationsOpen && (
+        <React.Fragment>
+          <Divider vertical={isComputer} horizontal={!isComputer}>
+            OR
+          </Divider>
+          <ApplyContainer>
+            <p style={{color: 'black'}}>Haven't applied? Need an account?</p>
+            <SUIButton
+              primary
+              as='a'
+              href='https://2020.swamphacks.com/application'
+            >
+              Apply Now
+            </SUIButton>
+          </ApplyContainer>
+        </React.Fragment>
+      )}
     </RootContainer>
   );
 };

@@ -7,8 +7,6 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import Firebase, {FirebaseContext} from './components/Firebase';
 import PageC, {PageContext} from './components/PageContext';
 
-document.body.style = 'background: #5e765e;';
-
 ReactDOM.render(
   <FirebaseContext.Provider value={new Firebase()}>
     <PageContext.Provider value={new PageC()}>

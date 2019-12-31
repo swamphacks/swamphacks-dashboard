@@ -103,6 +103,7 @@ const HomeComponent = ({firebase, paths}) => {
     accepted: false,
     confirmed: false
   });
+  const [confirmationsOpen, setConfirmationsOpen] = useState(false);
 
   useLayoutEffect(() => {
     const unsubscribe = firebase.getDashboardData(val => {
@@ -119,6 +120,7 @@ const HomeComponent = ({firebase, paths}) => {
       }
       setData(newVal);
     });
+    firebase.checkConfirmationsClosed(val => setConfirmationsOpen(val));
     return () => {
       unsubscribe();
     };
@@ -146,18 +148,22 @@ const HomeComponent = ({firebase, paths}) => {
         <InfoText>Application Status: {data.status}</InfoText>
         {data.accepted && (
           <ButtonContainer>
-            <Button
-              onClick={() => firebase.updateAttendance(true)}
-              disabled={data.confirmed}
-            >
-              {data.confirmed ? 'Attending' : 'Confirm Attendance'}
-            </Button>
-            <Button
-              onClick={() => firebase.updateAttendance(false)}
-              disabled={!data.confirmed}
-            >
-              {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
-            </Button>
+            {(confirmationsOpen || data.confirmed) && (
+              <Button
+                onClick={() => firebase.updateAttendance(true)}
+                disabled={data.confirmed}
+              >
+                {data.confirmed ? 'Attending' : 'Confirm Attendance'}
+              </Button>
+            )}
+            {(confirmationsOpen || !data.confirmed) && (
+              <Button
+                onClick={() => firebase.updateAttendance(false)}
+                disabled={!data.confirmed}
+              >
+                {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
+              </Button>
+            )}
           </ButtonContainer>
         )}
         <CodeText>{data.code}</CodeText>
