@@ -12,6 +12,11 @@ const Icon = styled.svg`
     transform: scale(1.1);
     cursor: pointer;
   }
+  :active {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
 `;
 
 const Button = styled.div`

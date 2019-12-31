@@ -11,40 +11,54 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  position: relative;
 `;
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(1, auto);
   column-gap: 10px;
   row-gap: 20px;
   justify-items: center;
-  align-items: stretch;
+  align-items: center;
 `;
 
-const Chip = styled.div`
-  padding: 5px;
-  font-family: ${props =>
-    props.bold
-      ? 'Montserrat-Bold, Helvetica, sans-serif'
-      : 'Montserrat, Helvetica, sans-serif'};
-  background-color: ${props => (props.bold ? 'transparent' : '#8daa90')};
+const EventContainer = styled.div`
+  padding: 20px;
+  background-color: #8daa90;
   opacity: ${props => (props.complete ? '0.5' : '1')}
   border-radius: 5px;
-  font-size: 0.9rem;
   width: 100%;
   flex-shrink: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  flex-direction: column;
+`;
+
+const EventName = styled.p`
+  font-family: Montserrat-Bold, Helvetica, sans-serif;
+  font-size: 1.2rem;
+`;
+
+const EventType = styled.p`
+  display: inline;
+  font-family: Montserrat, Helvetica, sans-serif;
+  font-size: 1.3rem;
+`;
+
+const EventTime = styled.p`
+  font-family: Montserrat, Helvetica, sans-serif;
+  font-size: 0.9rem;
+`;
+
+const EventLocation = styled.p`
+  font-family: Montserrat, Helvetica, sans-serif;
+  font-size: 1rem;
 `;
 
 const DayText = styled.h3`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
-`;
-
-const EventText = styled.p`
-  font-family: Montserrat, Helvetica, sans-serif;
 `;
 
 const Schedule = () => {
@@ -99,7 +113,6 @@ const Schedule = () => {
             <DayText>Friday</DayText>
 
             <GridContainer>
-              {renderKey()}
               {events.map(event => {
                 if (event.day === 'Friday') {
                   return renderEvent(event);
@@ -135,24 +148,19 @@ const Schedule = () => {
   );
 };
 
-const renderKey = () => (
-  <React.Fragment>
-    <Chip bold>Name</Chip>
-    <Chip bold>Type</Chip>
-    <Chip bold>Location</Chip>
-    <Chip bold>Start</Chip>
-    <Chip bold>End</Chip>
-  </React.Fragment>
-);
-
 const renderEvent = event => (
-  <React.Fragment key={event.name + event.start}>
-    <Chip complete={checkIfComplete(event)}>{event.name}</Chip>
-    <Chip complete={checkIfComplete(event)}>{event.type}</Chip>
-    <Chip complete={checkIfComplete(event)}>{event.location}</Chip>
-    <Chip complete={checkIfComplete(event)}>{event.start}</Chip>
-    <Chip complete={checkIfComplete(event)}>{event.end}</Chip>
-  </React.Fragment>
+  <EventContainer
+    key={event.name + event.start}
+    complete={checkIfComplete(event)}
+  >
+    <EventName>
+      {event.name}
+      <EventType> - {event.type}</EventType>
+    </EventName>
+    <EventLocation>Location: {event.location}</EventLocation>
+    <EventTime>Start: {event.start}</EventTime>
+    <EventTime>End: {event.end}</EventTime>
+  </EventContainer>
 );
 
 const createEvent = (name, type, location, day, start, end) => ({
@@ -189,6 +197,5 @@ const checkIfComplete = a => {
 };
 
 const types = ['Logistics', 'Food', 'Activity'];
-const startDate = new Date(2020, 0, 31);
 
 export default Schedule;
