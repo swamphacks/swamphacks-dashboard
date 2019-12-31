@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import styled from 'styled-components';
 import * as yup from 'yup';
+import LoadingPage from './LoadingPage';
 import {withFirebase} from '../components/Firebase';
 
 // Styled components
@@ -106,7 +107,7 @@ const errorComponent = ({message}) => (
 const LoginPage = ({firebase}) => {
   const isComputer = useMediaQuery('(min-width: 1200px)');
   const [forgotPassword, setForgotPassword] = useState(false);
-  const [applicationsOpen, setApplicationsOpen] = useState(false);
+  const [applicationsOpen, setApplicationsOpen] = useState(null);
   const history = useHistory();
   const location = useLocation();
   const {from} = location.state || {from: {pathname: '/'}};
@@ -166,6 +167,10 @@ const LoginPage = ({firebase}) => {
       formikApi.setSubmitting(false);
     }
   };
+
+  if (applicationsOpen === null) {
+    return <LoadingPage />;
+  }
 
   return (
     <RootContainer>
