@@ -29,7 +29,7 @@ const ContentLabel = styled.h4`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
 `;
 
-const ContentText = styled.p`
+const ContentText = styled.div`
   font-family: Montserrat, Helvetica, sans-serif;
 `;
 

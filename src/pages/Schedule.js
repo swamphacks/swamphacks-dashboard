@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import PageTitle from '../components/PageTitle';
 import {PageRootContainer as RootContainer} from '../components/PageRootContainer';
+import eventsSheet from '../scheduleSheet.json';
 
 // Styled components
 const ContentContainer = styled.div`
@@ -36,23 +37,23 @@ const EventContainer = styled.div`
   flex-direction: column;
 `;
 
-const EventName = styled.p`
+const EventName = styled.div`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
   font-size: 1.2rem;
 `;
 
-const EventType = styled.p`
+const EventType = styled.div`
   display: inline;
   font-family: Montserrat, Helvetica, sans-serif;
   font-size: 1.3rem;
 `;
 
-const EventTime = styled.p`
+const EventTime = styled.div`
   font-family: Montserrat, Helvetica, sans-serif;
   font-size: 0.9rem;
 `;
 
-const EventLocation = styled.p`
+const EventLocation = styled.div`
   font-family: Montserrat, Helvetica, sans-serif;
   font-size: 1rem;
 `;
@@ -67,37 +68,15 @@ const Schedule = () => {
   useEffect(() => {
     setEvents(
       [
-        createEvent(
-          'Test 1',
-          'Logistics',
-          'Marston Breezeway',
-          'Friday',
-          '05:30 PM',
-          '07:30 PM'
-        ),
-        createEvent(
-          'Test 2',
-          'Food',
-          'Marston Breezeway',
-          'Friday',
-          '06:00 PM',
-          '07:30 PM'
-        ),
-        createEvent(
-          'Test 4',
-          'Activity',
-          'Marston Breezeway',
-          'Saturday',
-          '06:00 PM',
-          '07:30 PM'
-        ),
-        createEvent(
-          'Test 3',
-          'Activity',
-          'Marston Breezeway',
-          'Saturday',
-          '06:00 AM',
-          '07:30 AM'
+        ...eventsSheet.map(event =>
+          createEvent(
+            event.name,
+            event.type,
+            event.location,
+            event.day,
+            event.start,
+            event.end
+          )
         )
       ].sort(sortByDateHelper)
     );
@@ -113,9 +92,9 @@ const Schedule = () => {
             <DayText>Friday</DayText>
 
             <GridContainer>
-              {events.map(event => {
+              {events.map((event, index) => {
                 if (event.day === 'Friday') {
-                  return renderEvent(event);
+                  return renderEvent(event, index);
                 }
               })}
             </GridContainer>
@@ -124,9 +103,9 @@ const Schedule = () => {
           <React.Fragment>
             <DayText>Saturday</DayText>
             <GridContainer>
-              {events.map(event => {
+              {events.map((event, index) => {
                 if (event.day === 'Saturday') {
-                  return renderEvent(event);
+                  return renderEvent(event, index);
                 }
               })}
             </GridContainer>
@@ -135,9 +114,9 @@ const Schedule = () => {
           <React.Fragment>
             <DayText>Sunday</DayText>
             <GridContainer>
-              {events.map(event => {
+              {events.map((event, index) => {
                 if (event.day === 'Sunday') {
-                  return renderEvent(event);
+                  return renderEvent(event, index);
                 }
               })}
             </GridContainer>
@@ -148,18 +127,15 @@ const Schedule = () => {
   );
 };
 
-const renderEvent = event => (
-  <EventContainer
-    key={event.name + event.start}
-    complete={checkIfComplete(event)}
-  >
+const renderEvent = (event, index) => (
+  <EventContainer key={event.name + index} complete={checkIfComplete(event)}>
     <EventName>
       {event.name}
       <EventType> - {event.type}</EventType>
     </EventName>
     <EventLocation>Location: {event.location}</EventLocation>
-    <EventTime>Start: {event.start}</EventTime>
-    <EventTime>End: {event.end}</EventTime>
+    <EventTime>Starts: {getHourMinute(event.startDate)}</EventTime>
+    <EventTime>Ends: {getHourMinute(event.endDate)}</EventTime>
   </EventContainer>
 );
 
@@ -168,8 +144,6 @@ const createEvent = (name, type, location, day, start, end) => ({
   type,
   location,
   day,
-  start,
-  end,
   startDate: interpolateDate(day, start),
   endDate: interpolateDate(day, end)
 });
@@ -180,12 +154,24 @@ const interpolateDate = (day, time) => {
   if (day === 'Friday') month = 0;
   if (day === 'Saturday') d = 1;
   if (day === 'Sunday') d = 2;
-  let amPM = time.slice(time.length - 2);
-  let hour = parseInt(time.slice(0, time.length - 6));
-  let minute = parseInt(time.slice(3, time.length - 3));
-  if (amPM === 'PM') hour += 12;
-  if (hour > 24) hour -= 24;
+  let [hour, minute] = time.split(':');
+  hour = parseInt(hour);
+  minute = parseInt(minute);
   return new Date(2020, month, d, hour, minute);
+};
+
+const getHourMinute = date => {
+  let hour = date.getHours() + 1;
+  let minutes = date.getMinutes();
+  let amPM = 'AM';
+  if (hour === 12) {
+    amPM = 'PM';
+  } else if (hour > 12) {
+    amPM = 'PM';
+    hour -= 12;
+  }
+  if (minutes === 0) minutes = '00';
+  return `${hour}:${minutes} ${amPM}`;
 };
 
 const sortByDateHelper = (a, b) => {
