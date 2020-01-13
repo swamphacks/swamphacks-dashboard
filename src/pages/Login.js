@@ -270,23 +270,27 @@ const LoginPage = ({firebase}) => {
           )}
         </StyledForm>
       </FormContainer>
-      {applicationsOpen && (
-        <React.Fragment>
-          <Divider vertical={isComputer} horizontal={!isComputer}>
-            OR
-          </Divider>
-          <ApplyContainer>
-            <p style={{color: 'black'}}>Haven't applied? Need an account?</p>
-            <SUIButton
-              primary
-              as='a'
-              href='https://2020.swamphacks.com/application'
-            >
-              Apply Now
-            </SUIButton>
-          </ApplyContainer>
-        </React.Fragment>
-      )}
+      <Divider vertical={isComputer} horizontal={!isComputer}>
+        OR
+      </Divider>
+      <ApplyContainer>
+        <p style={{color: 'black'}}>
+          {applicationsOpen
+            ? "Haven't applied? Need an account?"
+            : 'Missed out on applying to SwampHacks? You can still participate as a volunteer!'}
+        </p>
+        <SUIButton
+          primary
+          as='a'
+          href={
+            applicationsOpen
+              ? 'https://2020.swamphacks.com/application'
+              : 'https://2020.swamphacks.com/mvapplication'
+          }
+        >
+          {applicationsOpen ? 'Apply Now' : 'Volunteer Now'}
+        </SUIButton>
+      </ApplyContainer>
     </RootContainer>
   );
 };
