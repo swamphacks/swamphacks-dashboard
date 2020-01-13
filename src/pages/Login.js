@@ -79,7 +79,7 @@ const FormContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   @media screen and (min-width: 1200px) {
-    width: ${props => (props.applicationsOpen ? '50%' : '100%')};
+    width: 50%;
   }
 `;
 
@@ -274,7 +274,7 @@ const LoginPage = ({firebase}) => {
         OR
       </Divider>
       <ApplyContainer>
-        <p style={{color: 'black'}}>
+        <p style={{color: 'black', maxWidth: 400}}>
           {applicationsOpen
             ? "Haven't applied? Need an account?"
             : 'Missed out on applying to SwampHacks? You can still participate as a volunteer!'}
