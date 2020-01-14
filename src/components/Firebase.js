@@ -31,6 +31,14 @@ class Firebase {
     return this.auth.sendPasswordResetEmail(email);
   };
 
+  getUserEmail = () => {
+    if (this.auth.currentUser !== null) {
+      return this.auth.currentUser.email;
+    } else {
+      return null;
+    }
+  };
+
   checkSignedIn = callback => {
     const unsubscriber = this.auth.onAuthStateChanged(user => {
       const val = user !== null ? true : false;

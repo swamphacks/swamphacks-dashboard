@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import PageTitle from '../components/PageTitle';
 import {PageRootContainer as RootContainer} from '../components/PageRootContainer';
+import {withFirebase} from '../components/Firebase';
+
+import busEmailList from '../busList.json';
 
 // Styled components
 const ContentContainer = styled.div`
@@ -53,21 +56,36 @@ const EmailLinkText = styled.div`
   }
 `;
 
-const Travel = () => {
+const Travel = ({firebase}) => {
+  const [busEligible, setBusEligible] = useState(false);
+  useEffect(() => {
+    const email = firebase.getUserEmail();
+    if (email !== null) {
+      setBusEligible(busEmailList[email]);
+    }
+  }, []);
+
   return (
     <RootContainer>
       <PageTitle title='Travel Information' />
       <ContentContainer>
-        <Section>
-          <LabelText>Bus</LabelText>
-          <ContentLabel>Will there be any buses?</ContentLabel>
-          <ContentText>
-            Yes! We’ll be sending one bus to and from GeorgiaTech for hackers
-            traveling from the Atlanta area. There will be more information
-            about this trip when we get closer to the event, so be on the
-            lookout for an email!
-          </ContentText>
-        </Section>
+        {busEligible && (
+          <Section>
+            <LabelText>Bus</LabelText>
+            <ContentLabel>Will there be any buses?</ContentLabel>
+            <ContentText>
+              Yes! SwampHacks will be sending a bus to Georgia Tech and we have
+              indicated that you are elgible to get a seat on the bus. Click{' '}
+              <LinkText
+                target='_blank'
+                href='https://www.eventbrite.com/e/swamphacks-vi-georgia-tech-bus-tickets-89109166917?utm-medium=discovery&utm-campaign=social&utm-content=attendeeshare&aff=escb&utm-source=cp&utm-term=listing'
+              >
+                here
+              </LinkText>{' '}
+              to claim your seat on the bus via Eventbrite.
+            </ContentText>
+          </Section>
+        )}
         <Section>
           <LabelText>Carpooling</LabelText>
           <ContentLabel>How do I find someone to carpool with?</ContentLabel>
@@ -155,4 +173,4 @@ const Travel = () => {
   );
 };
 
-export default Travel;
+export default withFirebase(Travel);
