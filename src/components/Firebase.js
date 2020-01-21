@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/functions';
 import React from 'react';
 import firebaseConfig from '../firebaseConfig.json';
 
@@ -11,6 +12,7 @@ class Firebase {
     firebase.initializeApp(firebaseConfig);
     this.auth = firebase.auth();
     this.firestore = firebase.firestore();
+    this.functions = firebase.functions();
   }
 
   checkApplicationsOpen = async callback => {
@@ -63,63 +65,38 @@ class Firebase {
     await this.auth.signOut();
   };
 
-  updateAttendance = async val => {
-    const uid = this.auth.currentUser.uid;
-    const ref = this.firestore
-      .collection('years')
-      .doc('2020')
-      .collection('applications')
-      .where('uid', '==', uid);
-    const docs = await ref.get();
-    let id = null;
-    docs.forEach(doc => {
-      id = doc.id;
-    });
+  updateConfirmation = async confirmed => {
+    // Update user doc
     const ref2 = this.firestore
       .collection('years')
       .doc('2020')
-      .collection('applications')
-      .doc(id);
-    await ref2.update({confirmedAttendance: val});
-    const ref3 = this.firestore
-      .collection('years')
-      .doc('2020')
-      .collection('metadata')
-      .doc('applications');
-    let count = 1;
-    if (val === false) count = -1;
-    await ref3.update({
-      confirmedSize: firebase.firestore.FieldValue.increment(count)
-    });
+      .collection('users')
+      .doc(this.auth.currentUser.uid);
+    await ref2.update({ confirmed: confirmed });
   };
 
   getDashboardData = callback => {
-    const uid = this.auth.currentUser.uid;
     const ref = this.firestore
       .collection('years')
       .doc('2020')
-      .collection('applications')
-      .where('uid', '==', uid);
+      .collection('users')
+      .doc(this.auth.currentUser.uid);
     const unsubscriber = ref.onSnapshot(snap => {
       console.log('Data updated!');
-      let retData = {};
-      snap.docs.forEach(doc => {
-        const data = doc.data();
-        const {firstName, lastName, email, checkinCode} = data;
-        const accepted = data.accepted;
-        const name = firstName + ' ' + lastName;
-        const fi = firstName.substr(0, 1);
-        const li = lastName.substr(0, 1);
-        const initials = fi + li;
-        retData = {
-          initials: initials,
-          name: name,
-          email: email,
-          code: checkinCode,
-          accepted: accepted,
-          confirmed: data.confirmedAttendance ? true : false
-        };
-      });
+      const d = snap.data();
+      const initials = d.firstName.substr(0, 1) + d.lastName.substr(0, 1);
+      const retData = {
+        initials: initials,
+        name: `${d.firstName.charAt(0).toUpperCase() +
+          d.firstName.slice(1)} ${d.lastName.charAt(0).toUpperCase() +
+          d.lastName.slice(1)}`,
+        email: d.email,
+        code: d.code,
+        accepted: d.accepted,
+        confirmed: d.confirmed,
+        applicationType:
+          d.applicationType.charAt(0).toUpperCase() + d.applicationType.slice(1)
+      };
       callback(retData);
     });
     return unsubscriber;
@@ -134,4 +111,4 @@ const withFirebase = Component => props => (
 
 export default Firebase;
 
-export {FirebaseContext, withFirebase};
+export { FirebaseContext, withFirebase };

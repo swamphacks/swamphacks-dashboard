@@ -1,11 +1,11 @@
-import React, {useState, useLayoutEffect} from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import useMediaQuery from 'react-use-media-query-hook';
 
 import HamburgerMenu from './HamburgerMenu';
 import SocialButton from './SocialButton';
 import Button from './Button';
-import {withFirebase} from './Firebase';
+import { withFirebase } from './Firebase';
 
 // Styled components
 const RootContainer = styled.div`
@@ -92,7 +92,7 @@ const SocialContainer = styled.div`
   padding: 40px;
 `;
 
-const HomeComponent = ({firebase, paths}) => {
+const HomeComponent = ({ firebase, paths }) => {
   const isComputer = useMediaQuery('(min-width: 1200px)');
   const [data, setData] = useState({
     initials: '',
@@ -100,6 +100,7 @@ const HomeComponent = ({firebase, paths}) => {
     email: '{email}',
     status: '{status}',
     code: '{code}',
+    applicationType: '{applicationType}',
     accepted: false,
     confirmed: false
   });
@@ -131,7 +132,7 @@ const HomeComponent = ({firebase, paths}) => {
   };
 
   return (
-    <RootContainer style={{backgroundColor: '#8daa90'}}>
+    <RootContainer style={{ backgroundColor: '#8daa90' }}>
       {/* Hamburger Menu */}
       {isComputer && <HamburgerMenu paths={paths} logout={_handleLogout} />}
       {/* Title */}
@@ -144,13 +145,13 @@ const HomeComponent = ({firebase, paths}) => {
       <InfoContainer>
         <NameText>{data.name}</NameText>
         <InfoText>{data.email}</InfoText>
-        <InfoText>Hacker</InfoText>
+        <InfoText>{data.applicationType}</InfoText>
         <InfoText>Application Status: {data.status}</InfoText>
         {data.accepted && (
           <ButtonContainer>
             {(confirmationsOpen || data.confirmed) && (
               <Button
-                onClick={() => firebase.updateAttendance(true)}
+                onClick={() => firebase.updateConfirmation(true)}
                 disabled={data.confirmed}
               >
                 {data.confirmed ? 'Attending' : 'Confirm Attendance'}
@@ -158,7 +159,7 @@ const HomeComponent = ({firebase, paths}) => {
             )}
             {(confirmationsOpen || !data.confirmed) && (
               <Button
-                onClick={() => firebase.updateAttendance(false)}
+                onClick={() => firebase.updateConfirmation(false)}
                 disabled={!data.confirmed}
               >
                 {data.confirmed ? 'Reject Attendance' : 'Not Attending'}
@@ -171,7 +172,7 @@ const HomeComponent = ({firebase, paths}) => {
       {/* Social Buttons */}
       <div>
         {data.accepted && data.confirmed && (
-          <SocialContainer style={{paddingBottom: 0}}>
+          <SocialContainer style={{ paddingBottom: 0 }}>
             <SocialButton
               slack
               link='https://join.slack.com/t/swamphacks-vi/shared_invite/enQtODczMDY5NTc5MjMzLTY0ODViYjZiZjljYzdkNDY3ZDNiNjYyNWRkYjk3YTlkNzMyMjlkYTFmN2ExYTc1MGQ3NDEzYjk5MDBiZTI2YjU'
