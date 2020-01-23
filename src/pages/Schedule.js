@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 import PageTitle from '../components/PageTitle';
-import {PageRootContainer as RootContainer} from '../components/PageRootContainer';
-import eventsSheet from '../scheduleSheet.json';
+import { PageRootContainer as RootContainer } from '../components/PageRootContainer';
+import { withFirebase } from '../components/Firebase';
+import Select from '../components/Select';
 
 // Styled components
 const ContentContainer = styled.div`
@@ -62,37 +64,61 @@ const DayText = styled.h3`
   font-family: Montserrat-Bold, Helvetica, sans-serif;
 `;
 
-const Schedule = () => {
-  const [events, setEvents] = useState(null);
-  const [filterType, setFilterType] = useState(null);
+const Schedule = ({ firebase }) => {
+  const [events, setEvents] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+
   useEffect(() => {
-    setEvents(
-      [
-        ...eventsSheet.map(event =>
-          createEvent(
-            event.name,
-            event.type,
-            event.location,
-            event.day,
-            event.start,
-            event.end
-          )
-        )
-      ].sort(sortByDateHelper)
-    );
+    const unsubscriber = firebase.getSchedule(l => {
+      setEvents(l);
+      setFilteredEvents(l);
+      // Get all event types
+      let t = [];
+      l.forEach(e => {
+        if (t.indexOf(e.type) === -1) {
+          t.push(e.type);
+        }
+      });
+      setTypes(t);
+    });
+    return unsubscriber;
   }, []);
 
   return (
     <RootContainer>
       <PageTitle title='Schedule' />
-      {events !== null && (
+      <div style={{ display: 'flex', width: '100%' }}>
+        <Select
+          title='Filter by Type:'
+          options={types.map(t => ({ value: t, label: t }))}
+          style={{ marginBottom: 40 }}
+          onChange={filterType => {
+            let fe = [];
+            events.forEach(e => {
+              if (!filterType) {
+                fe.push(e);
+              } else if (e.type === filterType) {
+                fe.push(e);
+              }
+            });
+            setFilteredEvents(fe);
+          }}
+        />
+      </div>
+      {events.length === 0 && (
+        <Dimmer active>
+          <Loader>Fetching schedule</Loader>
+        </Dimmer>
+      )}
+      {events.length > 0 && (
         <ContentContainer>
           {/* Friday */}
           <React.Fragment>
             <DayText>Friday</DayText>
 
             <GridContainer>
-              {events.map((event, index) => {
+              {filteredEvents.map((event, index) => {
                 if (event.day === 'Friday') {
                   return renderEvent(event, index);
                 }
@@ -103,7 +129,7 @@ const Schedule = () => {
           <React.Fragment>
             <DayText>Saturday</DayText>
             <GridContainer>
-              {events.map((event, index) => {
+              {filteredEvents.map((event, index) => {
                 if (event.day === 'Saturday') {
                   return renderEvent(event, index);
                 }
@@ -114,7 +140,7 @@ const Schedule = () => {
           <React.Fragment>
             <DayText>Sunday</DayText>
             <GridContainer>
-              {events.map((event, index) => {
+              {filteredEvents.map((event, index) => {
                 if (event.day === 'Sunday') {
                   return renderEvent(event, index);
                 }
@@ -134,54 +160,32 @@ const renderEvent = (event, index) => (
       <EventType> - {event.type}</EventType>
     </EventName>
     <EventLocation>Location: {event.location}</EventLocation>
-    <EventTime>Starts: {getHourMinute(event.startDate)}</EventTime>
-    <EventTime>Ends: {getHourMinute(event.endDate)}</EventTime>
+    <EventTime>Starts: {getHourMinute(event.start)}</EventTime>
+    <EventTime>Ends: {getHourMinute(event.end)}</EventTime>
   </EventContainer>
 );
 
-const createEvent = (name, type, location, day, start, end) => ({
-  name,
-  type,
-  location,
-  day,
-  startDate: interpolateDate(day, start),
-  endDate: interpolateDate(day, end)
-});
-
-const interpolateDate = (day, time) => {
-  let month = 1;
-  let d = 31;
-  if (day === 'Friday') month = 0;
-  if (day === 'Saturday') d = 1;
-  if (day === 'Sunday') d = 2;
-  let [hour, minute] = time.split(':');
-  hour = parseInt(hour);
-  minute = parseInt(minute);
-  return new Date(2020, month, d, hour, minute);
-};
-
-const getHourMinute = date => {
-  let hour = date.getHours() + 1;
-  let minutes = date.getMinutes();
-  let amPM = 'AM';
-  if (hour === 12) {
-    amPM = 'PM';
-  } else if (hour > 12) {
-    amPM = 'PM';
-    hour -= 12;
+const getHourMinute = timestamp => {
+  const date = timestamp.toDate();
+  if (date) {
+    let hour = date.getHours() + 1;
+    let minutes = date.getMinutes();
+    let amPM = 'AM';
+    if (hour === 12) {
+      amPM = 'PM';
+    } else if (hour > 12) {
+      amPM = 'PM';
+      hour -= 12;
+    }
+    if (minutes === 0) minutes = '00';
+    return `${hour}:${minutes} ${amPM}`;
+  } else {
+    return `Time invalid.`;
   }
-  if (minutes === 0) minutes = '00';
-  return `${hour}:${minutes} ${amPM}`;
-};
-
-const sortByDateHelper = (a, b) => {
-  return a.startDate - b.startDate;
 };
 
 const checkIfComplete = a => {
   return a.endDate <= Date.now();
 };
 
-const types = ['Logistics', 'Food', 'Activity'];
-
-export default Schedule;
+export default withFirebase(Schedule);

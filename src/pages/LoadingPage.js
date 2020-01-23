@@ -1,23 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const RootContainer = styled.div`
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`;
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 const LoadingPage = () => {
   return (
-    <RootContainer>
-      <p>Loading...</p>
-    </RootContainer>
+    <Dimmer active>
+      <Loader>Signing in...</Loader>
+    </Dimmer>
   );
 };
 

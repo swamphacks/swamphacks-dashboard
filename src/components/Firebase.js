@@ -82,7 +82,7 @@ class Firebase {
       .collection('users')
       .doc(this.auth.currentUser.uid);
     const unsubscriber = ref.onSnapshot(snap => {
-      console.log('Data updated!');
+      console.log('User data updated!');
       const d = snap.data();
       const initials = d.firstName.substr(0, 1) + d.lastName.substr(0, 1);
       const retData = {
@@ -98,6 +98,23 @@ class Firebase {
           d.applicationType.charAt(0).toUpperCase() + d.applicationType.slice(1)
       };
       callback(retData);
+    });
+    return unsubscriber;
+  };
+
+  getSchedule = callback => {
+    const ref = this.firestore
+      .collection('years')
+      .doc('2020')
+      .collection('events')
+      .orderBy('start');
+    const unsubscriber = ref.onSnapshot(snap => {
+      console.log('Events updated!');
+      let events = [];
+      snap.forEach(doc => {
+        events.push(doc.data());
+      });
+      callback(events);
     });
     return unsubscriber;
   };
