@@ -178,6 +178,7 @@ const HomeComponent = ({ firebase, paths }) => {
               link='https://join.slack.com/t/swamphacks-vi/shared_invite/enQtODczMDY5NTc5MjMzLTY0ODViYjZiZjljYzdkNDY3ZDNiNjYyNWRkYjk3YTlkNzMyMjlkYTFmN2ExYTc1MGQ3NDEzYjk5MDBiZTI2YjU'
               big
             />
+            <SocialButton github link='https://github.com/swamphacks' big />
           </SocialContainer>
         )}
         <SocialContainer>

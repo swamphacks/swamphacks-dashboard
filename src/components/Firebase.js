@@ -84,7 +84,9 @@ class Firebase {
     const unsubscriber = ref.onSnapshot(snap => {
       console.log('User data updated!');
       const d = snap.data();
-      const initials = d.firstName.substr(0, 1) + d.lastName.substr(0, 1);
+      const initials =
+        d.firstName.substr(0, 1).toUpperCase() +
+        d.lastName.substr(0, 1).toUpperCase();
       const retData = {
         initials: initials,
         name: `${d.firstName.charAt(0).toUpperCase() +
