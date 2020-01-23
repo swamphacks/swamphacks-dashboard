@@ -7,6 +7,8 @@ const RootContainer = styled.div`
   background-color: #8daa90;
   border-radius: 5px;
   padding: 10px;
+  -webkit-box-shadow: 0px 4px 20px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 20px 2px rgba(0, 0, 0, 0.25);
 `;
 
 const Title = styled.label`
@@ -28,6 +30,9 @@ const Sel = styled.select`
   color: white;
   padding: 10px;
   margin: 10px;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const Select = ({ title, options, style, onChange }) => {

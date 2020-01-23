@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Dimmer, Loader } from 'semantic-ui-react';
+import { scroller, Element } from 'react-scroll';
 
 import PageTitle from '../components/PageTitle';
 import { PageRootContainer as RootContainer } from '../components/PageRootContainer';
@@ -26,10 +27,10 @@ const GridContainer = styled.div`
   align-items: center;
 `;
 
-const EventContainer = styled.div`
+const EventContainer = styled(Element)`
   padding: 20px;
   background-color: #8daa90;
-  opacity: ${props => (props.complete ? '0.5' : '1')}
+  opacity: ${props => (props.completed === 'yes' ? '0.5' : '1')}
   border-radius: 5px;
   width: 100%;
   flex-shrink: 0;
@@ -85,14 +86,44 @@ const Schedule = ({ firebase }) => {
     return unsubscriber;
   }, []);
 
+  // if (filteredEvents.length > 0) {
+  //   // Find event to scroll to
+  //   let event = null;
+  //   for (let i = 0; i < filteredEvents.length; i++) {
+  //     const e = filteredEvents[i];
+  //     if (checkIfComplete(e.end) === false) {
+  //       event = e;
+  //       break;
+  //     }
+  //   }
+  //   console.log(event);
+  //   if (event) {
+  //     scroller.scrollTo(`${event.day}${event.name}`, {
+  //       duration: 1500,
+  //       delay: 100,
+  //       smooth: true,
+  //       containerId: 'ContentContainer',
+  //       offset: 220
+  //     });
+  //   }
+  // }
+
   return (
     <RootContainer>
       <PageTitle title='Schedule' />
-      <div style={{ display: 'flex', width: '100%' }}>
+      <div
+        style={{
+          display: 'flex',
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 4000
+        }}
+      >
         <Select
           title='Filter by Type:'
           options={types.map(t => ({ value: t, label: t }))}
-          style={{ marginBottom: 40 }}
+          style={{}}
           onChange={filterType => {
             let fe = [];
             events.forEach(e => {
@@ -154,7 +185,11 @@ const Schedule = ({ firebase }) => {
 };
 
 const renderEvent = (event, index) => (
-  <EventContainer key={event.name + index} complete={checkIfComplete(event)}>
+  <EventContainer
+    key={event.name + index}
+    name={event.day + event.name}
+    completed={checkIfComplete(event.end) ? 'yes' : 'no'}
+  >
     <EventName>
       {event.name}
       <EventType> - {event.type}</EventType>
@@ -184,8 +219,10 @@ const getHourMinute = timestamp => {
   }
 };
 
-const checkIfComplete = a => {
-  return a.endDate <= Date.now();
+const checkIfComplete = timestamp => {
+  const end = timestamp.toDate();
+  const d = Date.now();
+  return end <= d;
 };
 
 export default withFirebase(Schedule);

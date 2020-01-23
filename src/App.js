@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect} from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import {
   Route,
   Redirect,
@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import request from 'request';
 import styled from 'styled-components';
-import {withFirebase} from './components/Firebase';
+import { withFirebase } from './components/Firebase';
 import useMediaQuery from 'react-use-media-query-hook';
 
 // Pages
@@ -59,7 +59,7 @@ const ContentContainer = styled.div`
   }
 `;
 
-const App = ({firebase}) => {
+const App = ({ firebase }) => {
   const [signedIn, setSignedIn] = useState(null);
   const isComputer = useMediaQuery('(min-width: 1200px)');
 
@@ -76,7 +76,7 @@ const App = ({firebase}) => {
     return <LoadingPage />;
   }
 
-  const PrivateRoute = ({children, ...rest}) => {
+  const PrivateRoute = ({ children, ...rest }) => {
     return (
       <Route
         {...rest}
@@ -87,7 +87,7 @@ const App = ({firebase}) => {
             <Redirect
               to={{
                 pathname: '/login',
-                state: {from: rest.path}
+                state: { from: rest.path }
               }}
             />
           )
@@ -142,7 +142,7 @@ const App = ({firebase}) => {
 
   // Paths
   const paths = [
-    ...routes.map(({label, path}) => ({
+    ...routes.map(({ label, path }) => ({
       label: label,
       path: path
     }))
@@ -163,12 +163,12 @@ const App = ({firebase}) => {
             <HamburgerMenu
               paths={paths}
               logout={async () => await firebase.signOut()}
-              buttonStyle={{left: 30, position: 'fixed'}}
+              buttonStyle={{ left: 30, position: 'fixed' }}
             />
           )}
         </React.Fragment>
       )}
-      <MainContainer>
+      <MainContainer id='ContentContainer'>
         <Switch>
           {routes.map((route, index) => (
             <PrivateRoute
