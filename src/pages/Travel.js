@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import PageTitle from '../components/PageTitle';
-import {PageRootContainer as RootContainer} from '../components/PageRootContainer';
-import {withFirebase} from '../components/Firebase';
+import { PageRootContainer as RootContainer } from '../components/PageRootContainer';
+import { withFirebase } from '../components/Firebase';
 
 import busEmailList from '../busList.json';
 
@@ -56,7 +56,29 @@ const EmailLinkText = styled.div`
   }
 `;
 
-const Travel = ({firebase}) => {
+const ButtonLink = styled.a`
+  background-color: rgba(141, 170, 144, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: white;
+  :hover {
+    color: white;
+    cursor: pointer;
+    background-color: rgba(141, 170, 144, 0.8);
+  }
+  :active {
+    color: white;
+    background-color: rgba(141, 170, 144, 1);
+  }
+  border-radius: 4px;
+`;
+
+const Travel = ({ firebase }) => {
   const [busEligible, setBusEligible] = useState(false);
   useEffect(() => {
     const email = firebase.getUserEmail();
@@ -72,17 +94,61 @@ const Travel = ({firebase}) => {
         {busEligible && (
           <Section>
             <LabelText>Bus</LabelText>
-            <ContentLabel>Will there be any buses?</ContentLabel>
+            <ContentLabel>How do I get on the bus?</ContentLabel>
             <ContentText>
-              Yes! SwampHacks will be sending a bus to Georgia Tech and we have
-              indicated that you are elgible to get a seat on the bus. Click{' '}
-              <LinkText
-                target='_blank'
-                href='https://www.eventbrite.com/e/swamphacks-vi-georgia-tech-bus-tickets-89109166917?utm-medium=discovery&utm-campaign=social&utm-content=attendeeshare&aff=escb&utm-source=cp&utm-term=listing'
-              >
-                here
-              </LinkText>{' '}
-              to claim your seat on the bus via Eventbrite.
+              In order to get on the bus, you must show the bus captain:
+              <ul>
+                <li>Student/Government issued ID</li>
+                <li>
+                  Confirmation proof from SwampHacks (either through the
+                  dashboard or email)
+                </li>
+                <li>Bus Ticket</li>
+              </ul>
+              Don't have a bus ticket yet? Use the button below to get one!
+            </ContentText>
+            <ButtonLink
+              href='https://www.eventbrite.com/e/swamphacks-vi-georgia-tech-bus-tickets-89109166917?utm-medium=discovery&utm-campaign=social&utm-content=attendeeshare&aff=escb&utm-source=cp&utm-term=listing'
+              target='_blank'
+            >
+              Get Ticket
+            </ButtonLink>
+            <ContentLabel>Where is the bus leaving?</ContentLabel>
+            <ContentText>
+              Atlanta to Gainesville: 266 4th St NW, Atlanta, GA 30313
+              <br />
+              Gainesville to Atlanta: 1765 Stadium Rd, Gainesville, FL 32608
+            </ContentText>
+            <ContentLabel>When is the bus leaving?</ContentLabel>
+            <ContentText>
+              <ul>
+                <li>
+                  Bus Arrives in Atlanta on Friday January 31st at 11:30 AM
+                </li>
+                <li>
+                  Bus Departs from Atlanta on Friday January 31st at 12:00 PM
+                </li>
+                <li>
+                  Bus Departs from Gainesville on Sunday February 2nd at 4:00 PM
+                </li>
+              </ul>
+            </ContentText>
+            <ContentLabel>
+              If I don't have a ticket or am not a confirmed hacker, can I still
+              get on the bus?
+            </ContentLabel>
+            <ContentText>
+              At 11:50 AM the bus will allow "walk-on" hackers to fill any empty
+              seats on the bus. Walk-on hackers come in 2 categories:
+              <ul>
+                <li>Confirmed hackers without a bus ticket</li>
+                <li>
+                  Unconfirmed hackers who have not submitted an application to
+                  SwampHacks*
+                </li>
+              </ul>
+              *Unconfirmed hackers will be required to give their e-mails to the
+              bus captain.
             </ContentText>
           </Section>
         )}
