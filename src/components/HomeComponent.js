@@ -116,6 +116,9 @@ const HomeComponent = ({ firebase, paths }) => {
         if (newVal.confirmed === true) {
           newVal.status = 'Confirmed';
         }
+        if (newVal.checkedIn === true) {
+          newVal.status = 'Checked In';
+        }
       } else if (newVal.accepted === false) {
         newVal.status = 'Rejected';
       }
@@ -171,6 +174,15 @@ const HomeComponent = ({ firebase, paths }) => {
       </InfoContainer>
       {/* Social Buttons */}
       <div>
+        {data.accepted && data.confirmed && data.checkedIn && (
+          <SocialContainer style={{ paddingBottom: 0 }}>
+            <SocialButton
+              devpost
+              link='https://swamphacks-vi.devpost.com/'
+              big
+            />
+          </SocialContainer>
+        )}
         {data.accepted && data.confirmed && (
           <SocialContainer style={{ paddingBottom: 0 }}>
             <SocialButton

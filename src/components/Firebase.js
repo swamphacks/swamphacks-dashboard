@@ -96,6 +96,7 @@ class Firebase {
         code: d.code,
         accepted: d.accepted,
         confirmed: d.confirmed,
+        checkedIn: d.checkedIn,
         applicationType:
           d.applicationType.charAt(0).toUpperCase() + d.applicationType.slice(1)
       };
