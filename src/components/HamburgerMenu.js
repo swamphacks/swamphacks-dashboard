@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {Transition} from 'react-spring/renderprops';
-import {Link} from 'react-router-dom';
+import { Transition } from 'react-spring/renderprops';
+import { Link } from 'react-router-dom';
 
 import HamburgerButton from './HamburgerButton';
 
@@ -23,11 +23,14 @@ const Drawer = styled.div`
 `;
 
 const LinkContainer = styled.div`
-  padding: 10px 0px;
+  padding: 2px 0px;
+  @media screen and (min-width: 1200px) {
+    padding: 10px 0px;
+  }
 `;
 
 const DrawerLink = styled(Link)`
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   color: white;
   text-decoration: none;
   :hover {
@@ -36,10 +39,13 @@ const DrawerLink = styled(Link)`
     color: white;
   }
   font-family: Montserrat-Bold, Helvetica, sans-serif;
+  @media screen and (min-width: 1200px) {
+    font-size: 1.75rem;
+  }
 `;
 
 const ExitLink = styled.a`
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   color: white;
   text-decoration: none;
   :hover {
@@ -48,10 +54,13 @@ const ExitLink = styled.a`
     color: white;
   }
   font-family: Montserrat-Bold, Helvetica, sans-serif;
+  @media screen and (min-width: 1200px) {
+    font-size: 1.75rem;
+  }
 `;
 
 const LogoutLink = styled.div`
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   color: white;
   text-decoration: none;
   :hover {
@@ -60,9 +69,12 @@ const LogoutLink = styled.div`
     color: white;
   }
   font-family: Montserrat-Bold, Helvetica, sans-serif;
+  @media screen and (min-width: 1200px) {
+    font-size: 1.75rem;
+  }
 `;
 
-const HamburgerMenu = ({paths, logout, buttonStyle}) => {
+const HamburgerMenu = ({ paths, logout, buttonStyle }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <React.Fragment>
@@ -80,15 +92,15 @@ const HamburgerMenu = ({paths, logout, buttonStyle}) => {
       />
       <Transition
         items={menuOpen}
-        from={{opacity: 0}}
-        enter={{opacity: 1}}
-        leave={{opacity: 0}}
+        from={{ opacity: 0 }}
+        enter={{ opacity: 1 }}
+        leave={{ opacity: 0 }}
       >
         {menuOpen =>
           menuOpen &&
           (props => (
             <Drawer style={props}>
-              {paths.map(({label, path}, index) => (
+              {paths.map(({ label, path }, index) => (
                 <LinkContainer
                   onClick={() => setMenuOpen(false)}
                   key={label + index}
