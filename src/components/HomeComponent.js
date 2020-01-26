@@ -124,7 +124,12 @@ const HomeComponent = ({ firebase, paths }) => {
       }
       setData(newVal);
     });
-    firebase.checkConfirmationsClosed(val => setConfirmationsOpen(val));
+    const fetchConfig = async () => {
+      const { data } = await firebase.getYearConfig();
+      const { confirmationsOpen } = data;
+      setConfirmationsOpen(confirmationsOpen);
+    };
+    fetchConfig();
     return () => {
       unsubscribe();
     };

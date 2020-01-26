@@ -1,7 +1,7 @@
-import React, {useState, useLayoutEffect} from 'react';
-import {Link, useHistory, useLocation} from 'react-router-dom';
+import React, { useState, useLayoutEffect } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import useMediaQuery from 'react-use-media-query-hook';
-import {Button, Form, Input} from 'formik-semantic-ui';
+import { Button, Form, Input } from 'formik-semantic-ui';
 import {
   Label,
   Transition,
@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components';
 import * as yup from 'yup';
 import LoadingPage from './LoadingPage';
-import {withFirebase} from '../components/Firebase';
+import { withFirebase } from '../components/Firebase';
 
 // Styled components
 const RootContainer = styled.div`
@@ -98,28 +98,33 @@ const resetSchema = yup.object().shape({
     .required('This field is required.')
 });
 
-const errorComponent = ({message}) => (
+const errorComponent = ({ message }) => (
   <Label basic color='red' pointing>
     {message}
   </Label>
 );
 
-const LoginPage = ({firebase}) => {
+const LoginPage = ({ firebase }) => {
   const isComputer = useMediaQuery('(min-width: 1200px)');
   const [forgotPassword, setForgotPassword] = useState(false);
   const [applicationsOpen, setApplicationsOpen] = useState(null);
   const history = useHistory();
   const location = useLocation();
-  const {from} = location.state || {from: {pathname: '/'}};
+  const { from } = location.state || { from: { pathname: '/' } };
 
   document.body.style = 'background: white;';
 
   useLayoutEffect(() => {
-    firebase.checkApplicationsOpen(val => setApplicationsOpen(val));
+    const fetchConfig = async () => {
+      const { data } = await firebase.getYearConfig();
+      const { hackerAppsOpen } = data;
+      setApplicationsOpen(hackerAppsOpen);
+    };
+    fetchConfig();
   }, []);
 
   const _handleSubmit = async (values, formikApi) => {
-    const {email, password} = values;
+    const { email, password } = values;
     try {
       await firebase.signIn(email, password);
       formikApi.setSubmitting(false);
@@ -147,7 +152,7 @@ const LoginPage = ({firebase}) => {
   };
 
   const _handleResetPassword = async (values, formikApi) => {
-    const {email} = values;
+    const { email } = values;
     try {
       await firebase.sendPasswordResetEmail(email);
       formikApi.setSubmitting(false);
@@ -182,8 +187,8 @@ const LoginPage = ({firebase}) => {
               onSubmit={_handleResetPassword}
               validationSchema={resetSchema}
               ignoreLoading
-              initialValues={{email: ''}}
-              style={{display: 'contents'}}
+              initialValues={{ email: '' }}
+              style={{ display: 'contents' }}
               validateOnBlur={false}
               validateOnChange={false}
             >
@@ -198,14 +203,14 @@ const LoginPage = ({firebase}) => {
                     <Input
                       name='email'
                       label='Email'
-                      inputProps={{placeholder: 'Email', type: 'email'}}
+                      inputProps={{ placeholder: 'Email', type: 'email' }}
                       fieldProps={{
                         required: true
                       }}
                       errorComponent={errorComponent}
                     />
                   </Modal.Description>
-                  <div style={{width: '100%'}}>
+                  <div style={{ width: '100%' }}>
                     <ButtonGroup>
                       <SUIButton onClick={() => setForgotPassword(false)}>
                         Close
@@ -225,19 +230,19 @@ const LoginPage = ({firebase}) => {
         </Modal>
       </Transition>
       <FormContainer applicationsOpen={applicationsOpen}>
-        <h1 style={{color: 'black'}}>Login</h1>
+        <h1 style={{ color: 'black' }}>Login</h1>
         <StyledForm
           onSubmit={_handleSubmit}
           validationSchema={schema}
           ignoreLoading
-          initialValues={{email: '', password: ''}}
+          initialValues={{ email: '', password: '' }}
         >
           {formikProps => (
             <InputContainer>
               <Input
                 name='email'
                 label='Email'
-                inputProps={{placeholder: 'Email', type: 'email'}}
+                inputProps={{ placeholder: 'Email', type: 'email' }}
                 fieldProps={{
                   required: true
                 }}
@@ -246,7 +251,7 @@ const LoginPage = ({firebase}) => {
               <Input
                 name='password'
                 label='Password'
-                inputProps={{type: 'password', placeholder: 'Password'}}
+                inputProps={{ type: 'password', placeholder: 'Password' }}
                 fieldProps={{
                   required: true
                 }}
@@ -274,7 +279,7 @@ const LoginPage = ({firebase}) => {
         OR
       </Divider>
       <ApplyContainer>
-        <p style={{color: 'black', maxWidth: 400}}>
+        <p style={{ color: 'black', maxWidth: 400 }}>
           {applicationsOpen
             ? "Haven't applied? Need an account?"
             : 'Missed out on applying to SwampHacks? You can still participate as a volunteer!'}
