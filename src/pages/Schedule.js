@@ -121,7 +121,7 @@ const Schedule = ({ firebase }) => {
         }}
       >
         <Select
-          title='Filter by Type:'
+          title='Filter:'
           options={types.map(t => ({ value: t, label: t }))}
           style={{}}
           onChange={filterType => {
