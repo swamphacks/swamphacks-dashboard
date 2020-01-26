@@ -5,7 +5,6 @@ import {
   Switch,
   BrowserRouter as Router
 } from 'react-router-dom';
-import request from 'request';
 import styled from 'styled-components';
 import { withFirebase } from './components/Firebase';
 import useMediaQuery from 'react-use-media-query-hook';
@@ -20,6 +19,7 @@ import Help from './pages/Help';
 import Travel from './pages/Travel';
 import LoadingPage from './pages/LoadingPage';
 import LoginPage from './pages/Login';
+import JamzPage from './pages/Jamz';
 
 // Components
 import HamburgerMenu from './components/HamburgerMenu';
@@ -107,6 +107,12 @@ const App = ({ firebase }) => {
       path: '/',
       exact: true,
       main: HomePage
+    },
+    {
+      label: 'Jamz',
+      path: '/jamz',
+      exact: false,
+      main: JamzPage
     },
     {
       label: 'Event',
