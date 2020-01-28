@@ -73,7 +73,7 @@ const App = ({ firebase }) => {
   }, []);
 
   if (signedIn === null) {
-    return <LoadingPage />;
+    return <LoadingPage message='Signing in...' />;
   }
 
   const PrivateRoute = ({ children, ...rest }) => {

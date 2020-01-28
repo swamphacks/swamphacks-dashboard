@@ -6,6 +6,7 @@ import HamburgerMenu from './HamburgerMenu';
 import SocialButton from './SocialButton';
 import Button from './Button';
 import { withFirebase } from './Firebase';
+import LoadingPage from '../pages/LoadingPage';
 
 // Styled components
 const RootContainer = styled.div`
@@ -94,16 +95,7 @@ const SocialContainer = styled.div`
 
 const HomeComponent = ({ firebase, paths }) => {
   const isComputer = useMediaQuery('(min-width: 1200px)');
-  const [data, setData] = useState({
-    initials: '',
-    name: '{name}',
-    email: '{email}',
-    status: '{status}',
-    code: '{code}',
-    applicationType: '{applicationType}',
-    accepted: false,
-    confirmed: false
-  });
+  const [data, setData] = useState(null);
   const [confirmationsOpen, setConfirmationsOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -138,6 +130,10 @@ const HomeComponent = ({ firebase, paths }) => {
   const _handleLogout = async () => {
     await firebase.signOut();
   };
+
+  if (data === null) {
+    return <LoadingPage />;
+  }
 
   return (
     <RootContainer style={{ backgroundColor: '#8daa90' }}>

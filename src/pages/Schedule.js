@@ -7,6 +7,7 @@ import PageTitle from '../components/PageTitle';
 import { PageRootContainer as RootContainer } from '../components/PageRootContainer';
 import { withFirebase } from '../components/Firebase';
 import Select from '../components/Select';
+import LoadingPage from '../pages/LoadingPage';
 
 // Styled components
 const ContentContainer = styled.div`
@@ -108,6 +109,10 @@ const Schedule = ({ firebase }) => {
   //   }
   // }
 
+  if (events.length === 0) {
+    return <LoadingPage message='Fetching schedule...' />;
+  }
+
   return (
     <RootContainer>
       <PageTitle title='Schedule' />
@@ -137,49 +142,42 @@ const Schedule = ({ firebase }) => {
           }}
         />
       </div>
-      {events.length === 0 && (
-        <Dimmer active>
-          <Loader>Fetching schedule</Loader>
-        </Dimmer>
-      )}
-      {events.length > 0 && (
-        <ContentContainer>
-          {/* Friday */}
-          <React.Fragment>
-            <DayText>Friday</DayText>
+      <ContentContainer>
+        {/* Friday */}
+        <React.Fragment>
+          <DayText>Friday</DayText>
 
-            <GridContainer>
-              {filteredEvents.map((event, index) => {
-                if (event.day === 'Friday') {
-                  return renderEvent(event, index);
-                }
-              })}
-            </GridContainer>
-          </React.Fragment>
-          {/* Saturday */}
-          <React.Fragment>
-            <DayText>Saturday</DayText>
-            <GridContainer>
-              {filteredEvents.map((event, index) => {
-                if (event.day === 'Saturday') {
-                  return renderEvent(event, index);
-                }
-              })}
-            </GridContainer>
-          </React.Fragment>
-          {/* Sunday */}
-          <React.Fragment>
-            <DayText>Sunday</DayText>
-            <GridContainer>
-              {filteredEvents.map((event, index) => {
-                if (event.day === 'Sunday') {
-                  return renderEvent(event, index);
-                }
-              })}
-            </GridContainer>
-          </React.Fragment>
-        </ContentContainer>
-      )}
+          <GridContainer>
+            {filteredEvents.map((event, index) => {
+              if (event.day === 'Friday') {
+                return renderEvent(event, index);
+              }
+            })}
+          </GridContainer>
+        </React.Fragment>
+        {/* Saturday */}
+        <React.Fragment>
+          <DayText>Saturday</DayText>
+          <GridContainer>
+            {filteredEvents.map((event, index) => {
+              if (event.day === 'Saturday') {
+                return renderEvent(event, index);
+              }
+            })}
+          </GridContainer>
+        </React.Fragment>
+        {/* Sunday */}
+        <React.Fragment>
+          <DayText>Sunday</DayText>
+          <GridContainer>
+            {filteredEvents.map((event, index) => {
+              if (event.day === 'Sunday') {
+                return renderEvent(event, index);
+              }
+            })}
+          </GridContainer>
+        </React.Fragment>
+      </ContentContainer>
     </RootContainer>
   );
 };
