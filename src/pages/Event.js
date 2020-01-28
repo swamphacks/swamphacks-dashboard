@@ -10,6 +10,10 @@ import ciseSecondFloor from '../maps/ciseSecondFloor.png';
 import marstonBasement from '../maps/marstonBasement.png';
 import marstonSecondFloor from '../maps/marstonSecondFloor.png';
 
+// Icons
+import devpostIcon from '../icons/devpostIcon.png';
+import mentorIcon from '../icons/mentorIcon.png';
+
 // Maps list
 const maps = [
   {
@@ -30,6 +34,38 @@ const maps = [
   }
 ];
 
+// Locations list
+const locations = [
+  {
+    title: 'Check-In',
+    description: 'Marston Breezeway'
+  },
+  {
+    title: 'Standby Line',
+    description: 'Marston Breezeway'
+  },
+  {
+    title: 'Opening Ceremony',
+    description: 'Carleton Auditorium'
+  },
+  {
+    title: 'Closing Ceremony',
+    description: 'Carleton Auditorium'
+  },
+  {
+    title: 'Help Desk',
+    description: 'Marston Basement Elevator Lobby'
+  },
+  {
+    title: 'Mentor Lounge',
+    description: 'Marston Basement Made@UF Lab'
+  },
+  {
+    title: 'Sleeping Room',
+    description: 'CISE E221'
+  }
+];
+
 // Styled components
 const ContentContainer = styled.div`
   width: 100%;
@@ -44,6 +80,55 @@ const Section = styled.section`
   flex-direction: column;
   padding: 20px 0px;
   max-width: 680px;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  column-gap: 20px;
+  row-gap: 20px;
+  justify-items: center;
+  align-items: stretch;
+  @media only screen and (min-width: 600px) {
+    grid-template-columns: repeat(3, 33%);
+  }
+  @media only screen and (min-width: 992px) {
+    grid-template-columns: repeat(4, 25%);
+  }
+`;
+
+const GridItem = styled.div`
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(141, 170, 144, 1);
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  overflow-x: hidden;
+  justify-content: flex-end;
+`;
+
+const LinkButton = styled.a`
+  background-color: rgba(94, 118, 94, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 20px;
+  text-decoration: none;
+  color: white;
+  :hover {
+    color: white;
+    cursor: pointer;
+    background-color: rgba(94, 118, 94, 1);
+  }
+  :active {
+    color: white;
+    background-color: rgba(94, 118, 94, 0.8);
+  }
+  border-radius: 4px;
 `;
 
 const LabelText = styled.h2`
@@ -68,6 +153,37 @@ const Event = () => {
     <RootContainer>
       <PageTitle title='Event' />
       <ContentContainer>
+        <div>
+          <LabelText>Guides</LabelText>
+          <Grid>
+            <GridItem>
+              <img style={{ width: '100%' }} src={devpostIcon} />
+              <ContentLabel style={{ textAlign: 'center' }}>
+                How to Use DevPost
+              </ContentLabel>
+              <LinkButton>Link</LinkButton>
+            </GridItem>
+            <GridItem>
+              <img
+                style={{ width: '90%', alignSelf: 'center' }}
+                src={mentorIcon}
+              />
+              <ContentLabel style={{ textAlign: 'center' }}>
+                Mentor Availability
+              </ContentLabel>
+              <LinkButton>Link</LinkButton>
+            </GridItem>
+          </Grid>
+        </div>
+        <Section>
+          <LabelText>Locations</LabelText>
+          {locations.map(loc => (
+            <React.Fragment>
+              <ContentLabel>{loc.title}</ContentLabel>
+              <ContentText>{loc.description}</ContentText>
+            </React.Fragment>
+          ))}
+        </Section>
         <Section>
           <LabelText>Maps</LabelText>
           {maps.map(mp => (

@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
+import { Dimmer, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useMediaQuery from 'react-use-media-query-hook';
 
@@ -6,7 +7,6 @@ import HamburgerMenu from './HamburgerMenu';
 import SocialButton from './SocialButton';
 import Button from './Button';
 import { withFirebase } from './Firebase';
-import LoadingPage from '../pages/LoadingPage';
 
 // Styled components
 const RootContainer = styled.div`
@@ -132,7 +132,13 @@ const HomeComponent = ({ firebase, paths }) => {
   };
 
   if (data === null) {
-    return <LoadingPage />;
+    return (
+      <RootContainer style={{ backgroundColor: '#8daa90' }}>
+        <Dimmer active>
+          <Loader inline='centered'>Fetching application...</Loader>
+        </Dimmer>
+      </RootContainer>
+    );
   }
 
   return (
@@ -141,6 +147,7 @@ const HomeComponent = ({ firebase, paths }) => {
       {isComputer && <HamburgerMenu paths={paths} logout={_handleLogout} />}
       {/* Title */}
       <WelcomeText>Welcome to SwampHacks VI</WelcomeText>
+
       {/* Picture */}
       <PictureContainer>
         <Initials>{data.initials}</Initials>

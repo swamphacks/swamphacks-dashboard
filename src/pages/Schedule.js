@@ -110,7 +110,13 @@ const Schedule = ({ firebase }) => {
   // }
 
   if (events.length === 0) {
-    return <LoadingPage message='Fetching schedule...' />;
+    return (
+      <RootContainer>
+        <Dimmer active>
+          <Loader inline='centered'>Fetching schedule...</Loader>
+        </Dimmer>
+      </RootContainer>
+    );
   }
 
   return (
