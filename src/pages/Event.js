@@ -161,7 +161,12 @@ const Event = () => {
               <ContentLabel style={{ textAlign: 'center' }}>
                 How to Use DevPost
               </ContentLabel>
-              <LinkButton>Link</LinkButton>
+              <LinkButton
+                href='https://drive.google.com/file/d/1gFZjcasSa7V4SCJCq6lGm3AURVw9zGpG/view?usp=sharing'
+                target='_blank'
+              >
+                Link
+              </LinkButton>
             </GridItem>
             <GridItem>
               <img
@@ -171,7 +176,12 @@ const Event = () => {
               <ContentLabel style={{ textAlign: 'center' }}>
                 Mentor Availability
               </ContentLabel>
-              <LinkButton>Link</LinkButton>
+              <LinkButton
+                href='https://docs.google.com/spreadsheets/d/16BQ4fqDWUpzs1_Gpg-58guC5x68t5cm6kvjDWDIT3Xg/'
+                target='_blank'
+              >
+                Link
+              </LinkButton>
             </GridItem>
           </Grid>
         </div>
