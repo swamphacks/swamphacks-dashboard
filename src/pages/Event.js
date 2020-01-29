@@ -13,6 +13,7 @@ import marstonSecondFloor from '../maps/marstonSecondFloor.png';
 // Icons
 import devpostIcon from '../icons/devpostIcon.png';
 import mentorIcon from '../icons/mentorIcon.png';
+import wifiIcon from '../icons/wifiIcon.png';
 
 // Maps list
 const maps = [
@@ -178,6 +179,21 @@ const Event = () => {
               </ContentLabel>
               <LinkButton
                 href='https://docs.google.com/spreadsheets/d/16BQ4fqDWUpzs1_Gpg-58guC5x68t5cm6kvjDWDIT3Xg/'
+                target='_blank'
+              >
+                Link
+              </LinkButton>
+            </GridItem>
+            <GridItem>
+              <img
+                style={{ width: '90%', alignSelf: 'center' }}
+                src={wifiIcon}
+              />
+              <ContentLabel style={{ textAlign: 'center' }}>
+                Guest WiFi Instructions
+              </ContentLabel>
+              <LinkButton
+                href='https://it.ufl.edu/ict/documentation/network-infrastructure/uf-guest-wireless/'
                 target='_blank'
               >
                 Link

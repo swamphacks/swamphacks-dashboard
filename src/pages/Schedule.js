@@ -207,7 +207,7 @@ const renderEvent = (event, index) => (
 const getHourMinute = timestamp => {
   const date = timestamp.toDate();
   if (date) {
-    let hour = date.getHours() + 1;
+    let hour = date.getHours();
     let minutes = date.getMinutes();
     let amPM = 'AM';
     if (hour === 12) {
@@ -217,6 +217,7 @@ const getHourMinute = timestamp => {
       hour -= 12;
     }
     if (minutes === 0) minutes = '00';
+    if (hour === 0) hour = 12;
     return `${hour}:${minutes} ${amPM}`;
   } else {
     return `Time invalid.`;
