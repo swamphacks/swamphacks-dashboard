@@ -115,6 +115,12 @@ const HomeComponent = ({ firebase, paths }) => {
       } else if (newVal.accepted === false) {
         newVal.status = 'Rejected';
       }
+      if (
+        newVal.status === 'Rejected' &&
+        newVal.applicationType === 'standby'
+      ) {
+        newVal.status = 'Pending';
+      }
       setData(newVal);
     });
     const fetchConfig = async () => {
