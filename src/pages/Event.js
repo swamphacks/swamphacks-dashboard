@@ -5,8 +5,9 @@ import PageTitle from '../components/PageTitle';
 import { PageRootContainer as RootContainer } from '../components/PageRootContainer';
 
 // Maps
-import ciseFirstFloor from '../maps/ciseFirstFloor.png';
-import ciseSecondFloor from '../maps/ciseSecondFloor.png';
+import ciseFirstFloor from '../maps/ciseFirstFloor.svg';
+import ciseSecondFloor from '../maps/ciseSecondFloor.svg';
+import marstonBreezeway from '../maps/marstonBreezeway.svg';
 import marstonBasement from '../maps/marstonBasement.png';
 import marstonSecondFloor from '../maps/marstonSecondFloor.png';
 
@@ -17,6 +18,10 @@ import wifiIcon from '../icons/wifiIcon.png';
 
 // Maps list
 const maps = [
+  {
+    src: marstonBreezeway,
+    label: 'Marston Breezeway'
+  },
   {
     src: ciseFirstFloor,
     label: 'CISE First Floor'

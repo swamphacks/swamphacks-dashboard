@@ -79,6 +79,7 @@ const NameText = styled.h2`
 
 const CodeText = styled.h3`
   font-family: Helvetica, sans-serif;
+  font-size: 2rem;
 `;
 
 const InfoText = styled.p`
@@ -158,6 +159,7 @@ const HomeComponent = ({ firebase, paths }) => {
         <InfoText>{data.email}</InfoText>
         <InfoText>{data.applicationType}</InfoText>
         <InfoText>Application Status: {data.status}</InfoText>
+        <CodeText>{data.code}</CodeText>
         {data.accepted && (
           <ButtonContainer>
             {(confirmationsOpen || data.confirmed) && (
@@ -178,7 +180,6 @@ const HomeComponent = ({ firebase, paths }) => {
             )}
           </ButtonContainer>
         )}
-        <CodeText>{data.code}</CodeText>
       </InfoContainer>
       {/* Social Buttons */}
       <div>
