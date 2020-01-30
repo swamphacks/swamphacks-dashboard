@@ -117,7 +117,7 @@ const HomeComponent = ({ firebase, paths }) => {
       }
       if (
         newVal.status === 'Rejected' &&
-        newVal.applicationType === 'standby'
+        newVal.applicationType === 'Standby'
       ) {
         newVal.status = 'Pending';
       }
