@@ -99,6 +99,10 @@ const HomeComponent = ({ firebase, paths }) => {
   const [data, setData] = useState(null);
   const [confirmationsOpen, setConfirmationsOpen] = useState(false);
 
+  if (!isComputer) {
+    document.body.style = 'background: #8daa90;';
+  }
+
   useLayoutEffect(() => {
     const unsubscribe = firebase.getDashboardData(val => {
       let newVal = val;

@@ -275,10 +275,10 @@ const LoginPage = ({ firebase }) => {
           )}
         </StyledForm>
       </FormContainer>
-      <Divider vertical={isComputer} horizontal={!isComputer}>
+      {/* <Divider vertical={isComputer} horizontal={!isComputer}>
         OR
-      </Divider>
-      <ApplyContainer>
+      </Divider> */}
+      {/* <ApplyContainer>
         <p style={{ color: 'black', maxWidth: 400 }}>
           {applicationsOpen
             ? "Haven't applied? Need an account?"
@@ -295,7 +295,7 @@ const LoginPage = ({ firebase }) => {
         >
           {applicationsOpen ? 'Apply Now' : 'Volunteer Now'}
         </SUIButton>
-      </ApplyContainer>
+      </ApplyContainer> */}
     </RootContainer>
   );
 };

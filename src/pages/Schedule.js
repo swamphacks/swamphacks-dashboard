@@ -227,6 +227,10 @@ const getHourMinute = timestamp => {
 const checkIfComplete = timestamp => {
   const end = timestamp.toDate();
   const d = Date.now();
+  if (end <= d) {
+    console.log(`NOW: ${d}`);
+    console.log(`EVE: ${end}`);
+  }
   return end <= d;
 };
 
